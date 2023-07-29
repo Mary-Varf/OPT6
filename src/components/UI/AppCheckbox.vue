@@ -24,7 +24,7 @@ export default {
     },
     methods: {
         onToggle (e) {
-            this.$emit('updateColPosition', {id: this.id, checked: e.target.checked});
+            this.$emit('update-checkbox', {id: this.id, checked: e.target.checked});
         },
     },
 }

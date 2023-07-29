@@ -40,7 +40,7 @@ export default {
         inset 0 1px 2px 0 rgba(255, 255, 255, 0.5);
     background-color: var(--white);
     min-width: 179px;
-    z-index: 10;
+    z-index: 100;
 }
 .popup--left {
     left: 0;

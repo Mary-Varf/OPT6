@@ -43,7 +43,13 @@ li {
 }
 table {
     border-collapse: collapse;
+    table-layout: fixed; /* Фиксированная ширина ячеек */
 }
 td {
     text-align: center;
+}
+@media(max-width: 1025px){
+    body {
+        background-image: var(--white);
+    }
 }

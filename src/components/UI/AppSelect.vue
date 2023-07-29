@@ -1,12 +1,11 @@
 <template>
-    <div class="app-select">
+<!--    <div class="app-select">-->
         <AppInput
             class="app-select__input"
             name="name"
             autocomplete="off"
             :type="'text'"
-            :value="query"
-            v-model="getOptionName"
+            :value="getOptionName"
             @click="toggleList"
             @input="changeQuery"
         ></AppInput>
@@ -19,7 +18,7 @@
                 v-html="getBoldText(option.name)"
             ></li>
         </ul>
-    </div>
+<!--    </div>-->
 </template>
 
 <script>
@@ -61,10 +60,14 @@ export default {
             this.$refs.list.classList.toggle('open')
         },
         selectOption(id) {
-            this.selectedOption = id
             const option = this.options.find((option) => option.id === id)
+
+            this.selectedOption = id
             this.query = option.name
+
             this.toggleList()
+
+            this.$emit('change-option', id);
         },
         getBoldText(name) {
             return name.toLowerCase().replace(this.query.toLowerCase(), `<b>${this.query}</b>`)
@@ -75,9 +78,10 @@ export default {
 
 <style scoped>
 .app-select {
-    position: relative;
     display: block;
     width: 100%;
+    height: 100%;
+    z-index: 100;
 }
 .app-select__list {
     display: none;
@@ -87,7 +91,6 @@ export default {
     right: 0;
     background: #fff;
     border-radius: 10px;
-    max-height: 205px;
     overflow-x: hidden;
     overflow-y: auto;
     z-index: 100;
@@ -132,5 +135,15 @@ export default {
 }
 .app-select input {
     width: 100%;
+}
+
+@media(max-width: 1024px) {
+    .app-select__list {
+        margin-top: 5px;
+        line-height: 0.5;
+        padding: 7px 10px;
+        font-size: 14px;
+        align-items: start;
+    }
 }
 </style>

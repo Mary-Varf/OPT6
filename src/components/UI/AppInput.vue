@@ -1,17 +1,27 @@
 <template>
-    <input class="app-input" :value="modelValue" :type="type" @input="updateInput" />
+    <input class="app-input" :value="value" :type="type" @input="updateInput" />
 </template>
 
 <script>
 export default {
     name: 'AppInput',
     props: {
-        modelValue: [String, Number],
-        type: String
+        value: {
+            type: [String, Number],
+        },
+        type: {
+            type: String,
+            default: 'text',
+        },
+        name: {
+            type: String,
+            required: true,
+        }
+
     },
     methods: {
         updateInput(e) {
-            this.$emit('update:modelValue', e.target.value)
+            this.$emit('update', e.target.value);
         }
     }
 }
@@ -21,13 +31,21 @@ export default {
 .app-input {
     border-radius: 5px;
     border: solid 1px #ccc;
-    padding: 10px 6px 10px 15px;
+    padding: 7px 6px 7px 15px;
     background-color: var(--white);
     width: 100%;
+    margin: 5px 0;
 }
 .app-input:hover,
 .app-input:focus {
     border: 1px solid var(--ashblue);
     outline: none;
+}
+
+@media(max-width: 1025px) {
+    .app-input{
+        padding: 6px 6px 7px 14px;
+        font-size: 16px;
+    }
 }
 </style>

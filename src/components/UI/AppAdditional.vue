@@ -11,10 +11,15 @@ export default {
 <style scoped>
 .icon--additional {
     width: 10px;
-    height: 13px;
+    height: 15px;
     background-image: url('../../assets/icons/ellipsis.svg');
     background-size: 3px 13px;
+    background-position: -2px 5px;
     background-repeat: no-repeat;
     cursor: pointer;
+}
+.icon--additional:hover,
+.icon--additional:focus {
+    background-image: url('../../assets/icons/ellipsisDark.svg');
 }
 </style>

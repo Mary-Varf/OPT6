@@ -1,42 +1,52 @@
 <template>
-    <div class="table-total">
-        <div class="table-total__row">
-            <div class="table-total__title">Сумма:</div>
-            <div class="table-total__val">{{ convertNumber(price) }} руб</div>
+    <div class="total-container">
+        <div class="table-total">
+            <div class="table-total__row">
+                <div class="table-total__title">Сумма:</div>
+                <div class="table-total__val">{{ convertNumber(price) }} руб</div>
+            </div>
+            <div class="table-total__row">
+                <div class="table-total__title">Кол-во:</div>
+                <div class="table-total__val">{{ convertNumber(quantity) }} шт</div>
+            </div>
+            <div class="table-total__row">
+                <div class="table-total__title">Общий вес:</div>
+                <div class="table-total__val">{{ convertNumber(weight) }} кг</div>
+            </div>
         </div>
-        <div class="table-total__row">
-            <div class="table-total__title">Кол-во:</div>
-            <div class="table-total__val">{{ convertNumber(quantity) }} шт</div>
-        </div>
-        <div class="table-total__row">
-            <div class="table-total__title">Общий вес:</div>
-            <div class="table-total__val">{{ convertNumber(weight) }} кг</div>
-        </div>
-    </div>
-    <div class="table-total table-total--bold">
-        <div class="table-total__row">
-            <div class="table-total__title">Общая сумма:</div>
-            <div class="table-total__val">{{ convertNumber(price) }} руб</div>
+        <div class="table-total table-total--bold">
+            <div class="table-total__row">
+                <div class="table-total__title">Общая сумма:</div>
+                <div class="table-total__val">{{ convertNumber(totalPrice) }} руб</div>
+            </div>
         </div>
     </div>
 </template>
 
 <script>
+import {mapState} from "vuex";
+
 export default {
     name: 'TotalBlock',
-    props: {
-        price: {
-            type: Number,
-            required: true
+    computed: {
+        ...mapState({
+            content: state=>state.content,
+        }),
+        weight() {
+            return this.content?.reduce((acc, el) => { return acc + el.maxWeight}, 0);
         },
-        quantity: {
-            type: Number,
-            required: true
+        quantity () {
+            return this.content?.reduce((acc, el) => { return acc + el.quantity}, 0);
         },
-        weight: {
-            type: Number,
-            required: true
-        }
+        deliveryPrice () {
+            return this.content?.reduce((acc, el) => { return acc + (el.addedDelivery ? el.deliveryPrice * el.quantity : 0)}, 0);
+        },
+        totalPrice () {
+            return this.price + this.deliveryPrice;
+        },
+        price () {
+            return this.content?.reduce((acc, el) => { return acc + (el.quantity * el.price)}, 0);
+        },
     },
     methods: {
         convertNumber(num) {
@@ -49,7 +59,7 @@ export default {
 <style scoped>
 .table-total {
     width: 305px;
-    padding: 15px;
+    padding: 12px 15px;
     border-radius: 5px;
     border: solid 1px #eeeff1;
     background-color: #fbfcfd;
@@ -61,17 +71,39 @@ export default {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 10px;
+    margin-bottom: 13px;
+}
+
+.table-total__row *{
+    font-size: 14px;
 }
 .table-total__row:last-child {
     margin-bottom: 0;
 }
 .table-total--bold {
-    padding: 11px 15px;
+    padding: 13px 15px;
 }
 .table-total--bold * {
     font-weight: 600;
-    font-size: 14px;
     margin-bottom: 0;
+}
+@media(max-width: 1025px) {
+    .table-total{
+        width: 100%;
+        margin-top: 15px;
+        padding: 10px 8px 10px 15px;
+    }
+    .table-total__row {
+        margin-bottom: 12px;
+    }
+    .table-total:last-child {
+        margin-top: 0;
+    }
+    .table-total--bold *{
+        font-size: 16px;
+    }
+    .table-total {
+        padding: 12px 10px 12px 15px;
+    }
 }
 </style>

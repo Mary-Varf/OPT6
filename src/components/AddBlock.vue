@@ -15,7 +15,7 @@ export default {
     components: { AppButton },
     methods: {
         addNewRow() {
-            this.$emit('addNewRow')
+            this.$emit('add-new-row')
         }
     }
 }
@@ -32,6 +32,13 @@ export default {
     margin-right: 4px;
 }
 .add-block {
-    padding: 19px 26px;
+    padding: 19px 24px;
+    box-shadow: 0 5px 20px 0 rgba(0, 0, 0, 0.07);
 }
+@media(max-width: 1025px) {
+    .add-block {
+        padding: 20px 23px;
+    }
+}
+
 </style>

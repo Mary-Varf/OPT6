@@ -22,7 +22,7 @@
                     <li class="popup__li" v-for="header in headers">
                         <AppCheckbox :checked="isChecked(header.id)"
                                      :id="header.id"
-                                     @update-col-position="updateColPosition"
+                                     @update-checkbox="updateColPosition"
                         >{{header.name}}</AppCheckbox>
                     </li>
                 </ul>
@@ -67,7 +67,7 @@ export default {
         updateColPosition({id, checked}) {
             let maxColPos = 0;
             this.headers.forEach(header=>{
-                maxColPos = header.colPosition > maxColPos ? ++header.colPosition : maxColPos;
+                maxColPos = header.colPosition > maxColPos ? header.colPosition : maxColPos;
             })
             const updatedHeaders = this.headers.map(header=> {
                 if (header.id === id) {
@@ -87,8 +87,8 @@ export default {
 
 <style scoped>
 .popup__ul {
-    max-height: 350px;
     overflow-y: scroll;
+    z-index: 100;
 }
 .popup__li {
     position: relative;

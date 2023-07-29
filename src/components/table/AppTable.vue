@@ -1,55 +1,92 @@
 <template>
-    <div class="container app-table">
-        <TableSettings />
-        <table class="table"
+    <div class="container app-table"
+         v-if="isDesktop">
+        <div>
+            <TableSettings/>
+        </div>
+
+        <div class="table-container"
+             ref="tableContainer"
         >
-            <TableHeader
-                v-for="header in sortedHeaders"
-                :key="header.type"
-                :header="header"
-                @change-start="changeStartCol"
-                @drop="handleDropCol($event, header.colPosition)"
-                @dragenter.prevent
-                @dragover.prevent
-            />
-            <template v-for="row in sortRows"
-                      :key="row.id"
+            <table class="table"
+                    :style="{'width': tableWidth}"
+                   @wheel="handleWheel"
             >
-                <TableRow @on-drop-row="onDropRow"
-                          @on-drag-row="onDragRow"
-                          @on-drag-enter="onDragEnter"
-                          :id="row.id"
-                          :showTopPlaceholder="row.rowPosition == this.enter && showTopPlaceholder"
-                          :showDownPlaceholder="row.rowPosition == this.enter && showDownPlaceholder"
-                          :row="sortedRow(row)" />
-            </template>
-        </table>
+                <TableHeader
+                    v-for="(header, index) in sortedHeaders"
+                    :key="header.type"
+                    :header="header"
+                    :lastItem="sortedHeaders.length - 1 === index"
+                    @change-start="changeStartCol"
+                    @drop="handleDropCol($event, header.colPosition)"
+                    @dragenter.prevent
+                    @dragover.prevent
+                />
+                <template v-for="row in sortRows"
+                          :key="row.id"
+                >
+                    <TableRow @on-drop-row="onDropRow"
+                              @on-drag-row="onDragRow"
+                              @on-drag-enter="onDragEnter"
+                              :id="row.id"
+                              :showBottomPlaceholder="!isDragHeader && row.rowPosition == this.enterPosition && showBottomPlaceholder"
+                              :showTopPlaceholder="!isDragHeader && row.rowPosition == this.enterPosition && showTopPlaceholder"
+                              :row="sortedRow(row)" />
+                </template>
+            </table>
+
+        </div>
+
+        <TotalBlock />
     </div>
+
+    <template v-else>
+        <div class="card container"
+             v-for="card in sortRows"
+             :key="card.id"
+             :id="card.id"
+        >
+            <template v-for="header in sortedHeaders"
+                      :key="header.id">
+                <TableHeader v-show="header.id != 0"
+                             :header="header" />
+                <TableCell :cell="getCell(header, card)"
+                           v-show="header.id != 0"
+                >
+
+                </TableCell>
+            </template>
+        </div>
+
+        <TotalBlock />
+    </template>
 </template>
 
 <script>
+import TableHeader from "@/components/table/TableHeader.vue";
 import AppAdditional from '@/components/UI/AppAdditional.vue'
 import AppPopup from '@/components/UI/AppPopup.vue'
 import TableRow from '@/components/table/TableRow.vue'
 import TotalBlock from '@/components/table/TotalBlock.vue'
 import TableSettings from "@/components/table/TableSettings.vue";
 import {mapActions, mapGetters, mapState} from "vuex";
-import TableHeader from "@/components/table/TableHeader.vue";
+import { desktopWidth } from '@/enums';
+import TableCell from "@/components/table/TableCell.vue";
+
 export default {
     name: 'AppTable',
-    components: {TableHeader, TableSettings, TotalBlock, TableRow, AppPopup, AppAdditional },
+    components: {TableCell, TableHeader, TableSettings, TotalBlock, TableRow, AppPopup, AppAdditional },
     props: {
     },
     data() {
         return {
-            shownPopup: -1,
-            updatedHeaders: [],
-            updatedContent: [],
             startColPosition: 0,
             startRowPosition: 0,
             showTopPlaceholder: false,
-            showDownPlaceholder: false,
-            enter: 0,
+            showBottomPlaceholder: false,
+            enterPosition: 0,
+            scroll: 0,
+            isDragHeader: false,
         }
     },
     computed: {
@@ -60,7 +97,11 @@ export default {
         ...mapGetters({
             sortedHeaders: 'sortedHeaders',
             sortRows: 'sortRows',
+            tableWidth: 'tableWidth',
         }),
+        isDesktop() {
+            return window.screen.width > desktopWidth;
+        },
     },
     methods: {
         ...mapActions({
@@ -82,7 +123,18 @@ export default {
 
             return newRow;
         },
+        handleWheel(e) {
+            if (e.target.tagName !== 'LI') {
+                const tableContainer = this.$refs.tableContainer;
+                this.scroll = this.scroll + e.deltaY;
+
+                e.preventDefault();
+
+                tableContainer.scrollLeft = this.scroll;
+            }
+        },
         handleDropCol(event, newPosition) {
+            this.isDragHeader = false;
             let updatedHeaders = [...this.headers].map(header => {
                 let newHeader = {};
                 if (header.colPosition === this.startColPosition) {
@@ -101,23 +153,23 @@ export default {
                 return newHeader;
             })
             this.updateHeaders(updatedHeaders)
+            console.log('table')
         },
         changeStartCol(startColPosition) {
+            this.isDragHeader = true;
             this.startColPosition = startColPosition;
         },
-        onDropRow(colPosition) {
+        onDropRow() {
             this.showTopPlaceholder = false;
-            this.showDownPlaceholder = false;
-
-            let i = this.startRowPosition;
+            this.showBottomPlaceholder = false;
 
             let newContent = [...this.content].map(row => {
                 let updatedRow = {};
 
-                if (row.rowPosition == this.enter || row.rowPosition == this.startRowPosition) {
+                if (row.rowPosition == this.enterPosition || row.rowPosition == this.startRowPosition) {
                     updatedRow = {
                         ...row,
-                        rowPosition: row.rowPosition == this.startRowPosition ? this.enter : this.startRowPosition,
+                        rowPosition: row.rowPosition == this.startRowPosition ? this.enterPosition : this.startRowPosition,
                     }
                 } else {
                     updatedRow = row;
@@ -125,53 +177,81 @@ export default {
                 return updatedRow;
             });
             this.updateContent(newContent);
-            console.log(newContent)
         },
         onDragRow(colPosition) {
             this.startRowPosition = colPosition;
         },
         onDragEnter(colPosition) {
-            this.enter = colPosition;
-            if (colPosition < this.startRowPosition) {
+            this.enterPosition = colPosition;
+
+            if (colPosition < this.startRowPosition && !this.isDragHeader) {
                 this.showTopPlaceholder = true;
-            } else if (colPosition > this.startRowPosition) {
-                this.showDownPlaceholder = true;
             }
-        }
-    }
+            else if(colPosition > this.startRowPosition && !this.isDragHeader) {
+                this.showBottomPlaceholder = true;
+            }
+        },
+        getCell(header, card) {
+            return this.sortedRow(card).find(el=> el.name === header.type);
+        },
+    },
 }
 </script>
 
 <style scoped>
-.empty {
-    border: 2px solid red;
-    height: 30px;
-}
-
-.a-table__header {
-    position: relative;
-}
-
-.a-table__row {
-    display: flex;
-    position: relative;
-}
 .app-table {
-    position: relative;
     padding: 32px 15px 25px 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    position: relative;
+    z-index: 1;
+    box-shadow: 0 5px 20px 0 rgba(0, 0, 0, 0.07);
+}
+.table-container {
+    overflow-x: hidden;
+    overflow-y: visible;
+    height: 100%;
+    width: 100%;
+
 }
 .app-settings {
     position: absolute;
-    top: 9px;
+    top: 10px;
     right: 15px;
+}
+.total-container {
+    align-self: flex-end;
 }
 .table {
     border-top: 1px solid var(--border);
     position: relative;
+    margin-bottom: 15px;
+    table-layout: fixed; /* Фиксированная ширина ячеек */
+    width: 100%;
 }
 .a-table__row div {
     padding: 10px 0;
     position: relative;
     overflow: hidden;
+}
+.app-table::-webkit-scrollbar {
+    width: 7px;
+    background-color: #f8f9fa;
+    padding: 5px;
+}
+
+.app-table::-webkit-scrollbar-thumb {
+    border-radius: 5px;
+    background-color: #d9d9d9;
+}
+.card {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 4px;
+    padding: 12px 15px;
+}
+@media(max-width: 1025px) {
+
 }
 </style>

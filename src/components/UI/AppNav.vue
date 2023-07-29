@@ -1,10 +1,8 @@
 <template>
     <div class="navbar">
-        <RouterView>
-            <RouterLink class="navbar__item" to="/common">Общее</RouterLink>
-            <RouterLink class="navbar__item active" to="/">Товар списания</RouterLink>
-            <RouterLink class="navbar__item" to="/">Доп. расходы</RouterLink>
-        </RouterView>
+            <a href="#" class="navbar__item">Общее</a>
+            <a href="#" class="navbar__item active">Товар списания</a>
+            <a href="#" class="navbar__item">Доп. расходы</a>
     </div>
 </template>
 
@@ -17,7 +15,8 @@ export default {
 <style scoped>
 .navbar {
     display: flex;
-    gap: 25px;
+    gap: 21.5px;
+    letter-spacing: 0.2px;
 }
 .navbar__item {
     color: var(--ashblue);

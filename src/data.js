@@ -5,15 +5,15 @@ const headers = [
         type: 'rowPosition',
         name: 'Номер',
         width: 39,
-        inputType: 'number'
+        inputType: 'rowPosition'
     },
     {
         id: 1,
         colPosition: 1,
         type: 'additional',
-        name: 'Дополнительно',
+        name: 'Действия',
         width: 10,
-        inputType: undefined,
+        inputType: 'additional',
     },
     {
         id: 2,
@@ -21,7 +21,7 @@ const headers = [
         type: 'name',
         name: 'Наименование единицы',
         width: 613,
-        inputType: 'text'
+        inputType: 'select'
     },
     {
         id: 3,
@@ -45,7 +45,7 @@ const headers = [
         type: 'itemName',
         name: 'Название товара',
         width: 157,
-        inputType: 'text'
+        inputType: 'select'
     },
     {
         id: 6,
@@ -88,9 +88,9 @@ const content = [
         name: 2,
         price: 1231,
         quantity: 12,
-        itemName: 'Мраморный щебе',
+        itemName: 2,
         addedDelivery: true,
-        deliveryPrice: '52',
+        deliveryPrice: 2,
         maxWeight: 100,
         total: 1233,
     },
@@ -101,9 +101,9 @@ const content = [
         name: 3,
         price: 1,
         quantity: 12,
-        itemName: 'Мраморный щебе',
-        addedDelivery: true,
-        deliveryPrice: '52',
+        itemName: 2,
+        addedDelivery: false,
+        deliveryPrice: 11,
         maxWeight: 100,
         total: 1233,
     },
@@ -114,9 +114,9 @@ const content = [
         name: 0,
         price: 12,
         quantity: 12,
-        itemName: 'Мраморный щебе',
+        itemName: 2,
         addedDelivery: true,
-        deliveryPrice: '52',
+        deliveryPrice: 52,
         maxWeight: 100,
         total: 1233,
     }
