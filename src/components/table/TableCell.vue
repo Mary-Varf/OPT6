@@ -185,6 +185,7 @@ td.resize {
     }
     .popup {
         bottom: -3px;
+        transform: translate(10px, 100%);
     }
     .popup__li {
         padding: 4px 10px 8px;
