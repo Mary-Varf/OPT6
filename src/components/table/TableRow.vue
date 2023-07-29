@@ -1,6 +1,6 @@
 <template>
     <tr v-show="showTopPlaceholder"><td :colspan="row.length"><div class="empty"></div></td></tr>
-    <tr v-if="id===1"><td :colspan="row.length"><div class="empty"></div></td></tr>
+    <tr v-show="id===1"><td :colspan="row.length"><div class="empty"></div></td></tr>
     <tr class="row"
         :draggable="true"
         @dragstart="onDragStart($event, rowPosition)"
@@ -78,7 +78,7 @@ export default {
 
 <style scoped>
 .empty {
-    height: 43px;
+    height: 44px;
     border-radius: 5px;
     background-color: #fbfcfd;
     margin-bottom: -1px;

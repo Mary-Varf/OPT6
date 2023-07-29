@@ -128,7 +128,7 @@ export default {
 }
 
 td {
-    padding: 1px 10px 1px 12px;
+    padding: 1px 8px 1px 12px;
     align-items: center;
     vertical-align: center;
     boreder: 1px solid var(--white);
@@ -157,10 +157,13 @@ td.resize {
 @media(max-width: 1025px) {
     td {
         padding: 0;
-        margin: 0 0 15px;
+        margin: 0 0 10px;
     }
     .popup {
-        bottom: -5px;
+        bottom: -3px;
+    }
+    .popup__li {
+        padding: 4px 10px 8px;
     }
 }
 </style>

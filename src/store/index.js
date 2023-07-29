@@ -17,6 +17,11 @@ export default createStore({
             return [...state.content].sort((a, b) => a.rowPosition - b.rowPosition);
         },
         tableWidth(state) {
+            console.log([...state.headers]
+                .filter(header=>header.colPosition >= 0)
+                .reduce((acc, header) => {
+                    return acc + header.width
+                }, 0))
             return [...state.headers]
                 .filter(header=>header.colPosition >= 0)
                 .reduce((acc, header) => {

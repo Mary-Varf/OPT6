@@ -91,19 +91,22 @@ export default {
     .table-total{
         width: 100%;
         margin-top: 15px;
-        padding: 10px 8px 10px 15px;
+        padding: 12px 13px 12px 15px;
     }
     .table-total__row {
-        margin-bottom: 12px;
+        letter-spacing: 0.9px;
+        margin-bottom: 14px;
     }
     .table-total:last-child {
         margin-top: 0;
     }
     .table-total--bold *{
         font-size: 16px;
+        letter-spacing: 0;
+
     }
-    .table-total {
-        padding: 12px 10px 12px 15px;
+    .table-total--bold {
+        padding-top: 14px;
     }
 }
 </style>

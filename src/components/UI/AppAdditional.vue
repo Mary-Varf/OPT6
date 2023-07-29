@@ -22,4 +22,12 @@ export default {
 .icon--additional:focus {
     background-image: url('../../assets/icons/ellipsisDark.svg');
 }
+@media(max-width: 1025px) {
+    .icon--additional {
+        height: 15px;
+        background-position: 0px 3px;
+        margin-bottom: 5px;
+    }
+
+}
 </style>

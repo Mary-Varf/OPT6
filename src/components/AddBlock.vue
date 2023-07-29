@@ -37,7 +37,7 @@ export default {
 }
 @media(max-width: 1025px) {
     .add-block {
-        padding: 20px 23px;
+        padding: 20px 24px;
     }
 }
 

@@ -139,11 +139,19 @@ export default {
 
 @media(max-width: 1024px) {
     .app-select__list {
-        margin-top: 5px;
+        margin-top: 0;
         line-height: 0.5;
-        padding: 7px 10px;
-        font-size: 14px;
+        padding: 0;
+        text-align: start;
+        overflow-x: hidden;
+        word-wrap: nowrap;
         align-items: start;
+        border-radius: 5px;
+        max-height: 145px;
+    }
+    ..app-select__list .app-select__item {
+        font-size: 14px;
+        padding: 10px 10px 11px;
     }
 }
 </style>

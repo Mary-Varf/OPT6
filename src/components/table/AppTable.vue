@@ -9,7 +9,7 @@
              ref="tableContainer"
         >
             <table class="table"
-                    :style="{'width': tableWidth}"
+                    :width="tableWidth"
                    @wheel="handleWheel"
             >
                 <TableHeader
@@ -228,7 +228,7 @@ export default {
     position: relative;
     margin-bottom: 15px;
     table-layout: fixed; /* Фиксированная ширина ячеек */
-    width: 100%;
+    /*width: 100%;*/
 }
 .a-table__row div {
     padding: 10px 0;
@@ -249,7 +249,7 @@ export default {
     display: flex;
     flex-direction: column;
     margin-bottom: 4px;
-    padding: 12px 15px;
+    padding: 12px 15px 9px;
 }
 @media(max-width: 1025px) {
 

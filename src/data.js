@@ -20,7 +20,7 @@ const headers = [
         colPosition: 2,
         type: 'name',
         name: 'Наименование единицы',
-        width: 613,
+        width: 614,
         inputType: 'select'
     },
     {
@@ -28,7 +28,7 @@ const headers = [
         colPosition: 3,
         type: 'price',
         name: 'Цена',
-        width: 206,
+        width: 207,
         inputType: 'number'
     },
     {
@@ -36,7 +36,7 @@ const headers = [
         colPosition: 4,
         type: 'quantity',
         name: 'Кол-во',
-        width: 206,
+        width: 207,
         inputType: 'number'
     },
     {

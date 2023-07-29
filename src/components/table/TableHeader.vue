@@ -1,10 +1,9 @@
 <template>
     <th class="header__item"
-        :width="startWidth + 11"
+        :width="startWidth + 10"
         :draggable="true"
-        fer="th"
+        :ref="`th${header.id}`"
         @mousedown="handleMouseDown"
-        @mouseup="() => handleMouseUp"
         @mouseleave="removeClassTd"
         @dragstart='dragStart($event, header.colPosition)'
     >
@@ -14,7 +13,6 @@
 
 <script>
 import {mapActions, mapGetters, mapState} from "vuex";
-import JQuery from 'jquery';
 
 export default {
     name: 'TableHeader',
@@ -30,6 +28,7 @@ export default {
     data() {
         return {
             startWidth: 0,
+            isResized: true,
         }
     },
     computed: {
@@ -43,8 +42,21 @@ export default {
     mounted() {
         this.startWidth = this.header.width;
         this.$nextTick(() => {
+            const node = this.$refs[`th${this.header.id}`];
+            const resizeObserver  = new ResizeObserver(this.debounce((entries) => {
 
+                for (let entry of entries) {
+                    const cr = entry.contentRect;
+                    if (this.startWidth !== cr.width) {
+                        console.log(entry)
+                        this.updateHeaderWidth(cr.width);
+                    }
+                }
+
+            }), 300);
+            resizeObserver.observe(node);
         })
+
     },
     methods: {
         ...mapActions({
@@ -59,6 +71,7 @@ export default {
         },
         handleMouseDown(e) {
             this.startWidth = e.target.offsetWidth;
+            this.isResized = true;
 
             this.addClassTd();
         },
@@ -74,19 +87,16 @@ export default {
             })
             document.getElementsByClassName('header__item')[this.header.colPosition]?.classList.remove('resize');
         },
-        handleMouseUp(e) {
-            this.removeClassTd();
+        updateHeaderWidth(newWidth) {
+            this.isResized = false;
+            // this.removeClassTd();
 
-            if (this.startWidth === e.target.offsetWidth) {
-                return;
-            }
-            console.log('header')
             this.updateHeaders(
                 [...this.headers].map(el => {
                     if (el.id === this.header.id) {
                         return {
                             ...el,
-                            width: e.target.offsetWidth
+                            width: newWidth
                         }
                     } else {
                         return el;
@@ -94,6 +104,27 @@ export default {
                 })
             )
         },
+        debounce(func, wait, immediate) {
+            let timeout;
+
+            return function executedFunction() {
+                const context = this;
+                const args = arguments;
+
+                const later = function() {
+                    timeout = null;
+                    if (!immediate) func.apply(context, args);
+                };
+
+                const callNow = immediate && !timeout;
+
+                clearTimeout(timeout);
+
+                timeout = setTimeout(later, wait);
+
+                if (callNow) func.apply(context, args);
+            };
+        }
     },
 }
 </script>
@@ -101,7 +132,6 @@ export default {
 <style  scoped>
 .header__item {
     padding: 10px 0 13px 11px;
-
     resize: horizontal;
     border-right: 1px solid red;
     overflow: hidden;
@@ -123,9 +153,11 @@ export default {
         border: none;
         color: #8f8f8f;
         font-size: 10px;
-        margin-bottom: 5px;
+        margin-bottom: 1px;
         font-weight: 400;
         padding: 0;
+        letter-spacing: 0px;
+        margin-left: -1px;
     }
 
 }
