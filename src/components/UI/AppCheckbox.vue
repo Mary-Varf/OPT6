@@ -33,5 +33,6 @@ export default {
 <style scoped>
 .checkbox__label {
     margin-left: 5px;
+    font-size: 14px;
 }
 </style>

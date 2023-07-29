@@ -1,6 +1,6 @@
 <template>
     <tr v-show="showTopPlaceholder"><td :colspan="row.length"><div class="empty"></div></td></tr>
-    <tr v-show="id===1"><td :colspan="row.length"><div class="empty"></div></td></tr>
+<!--    <tr v-show="id===1"><td :colspan="row.length"><div class="empty"></div></td></tr>-->
     <tr class="row"
         :draggable="true"
         @dragstart="onDragStart($event, rowPosition)"
@@ -11,7 +11,7 @@
         <template v-for="cell in row"
                   :key="cell.name"
         >
-            <TableCell :id="id"
+            <TableCell :row-id="id"
                        :cell="cell" />
         </template>
     </tr>

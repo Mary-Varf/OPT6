@@ -21,9 +21,6 @@ export default {
             type: Object,
             required: true
         },
-        lastItem: {
-            type: Boolean,
-        }
     },
     data() {
         return {
@@ -34,6 +31,7 @@ export default {
     computed: {
         ...mapState({
             headers: state=>state.headers,
+            isDesktop: state=> state.isDesktop,
         }),
         ...mapGetters({
             sortedHeaders: 'sortedHeaders',
@@ -41,39 +39,45 @@ export default {
     },
     mounted() {
         this.startWidth = this.header.width;
-        this.$nextTick(() => {
-            const node = this.$refs[`th${this.header.id}`];
-            const resizeObserver  = new ResizeObserver(this.debounce((entries) => {
+        if (this.isDesktop) {
+            this.$nextTick(() => {
+                const node = this.$refs[`th${this.header.id}`];
+                const resizeObserver  = new ResizeObserver(this.debounce((entries) => {
 
-                for (let entry of entries) {
-                    const cr = entry.contentRect;
-                    if (this.startWidth !== cr.width) {
-                        console.log(entry)
-                        this.updateHeaderWidth(cr.width);
+                    for (let entry of entries) {
+                        const cr = entry.contentRect;
+                        if (this.startWidth !== cr.width) {
+                            this.updateHeaderWidth(cr.width);
+                        }
                     }
+
+                }), 300);
+                if (node) {
+                    resizeObserver.observe(node);
                 }
-
-            }), 300);
-            resizeObserver.observe(node);
-        })
-
+            })
+        }
     },
     methods: {
         ...mapActions({
             updateHeaders: 'updateHeaders',
         }),
         dragStart (event, startPosition) {
-            event.dataTransfer.dropEffect = 'move';
-            event.dataTransfer.effectAllowed = 'move';
-            this.$emit('change-start', startPosition);
+            if (this.isDesktop) {
+                event.dataTransfer.dropEffect = 'move';
+                event.dataTransfer.effectAllowed = 'move';
+                this.$emit('change-start', startPosition);
 
-            this.removeClassTd();
+                this.removeClassTd();
+            }
         },
         handleMouseDown(e) {
-            this.startWidth = e.target.offsetWidth;
-            this.isResized = true;
+            if (this.isDesktop) {
+                this.startWidth = e.target.offsetWidth;
+                this.isResized = true;
 
-            this.addClassTd();
+                this.addClassTd();
+            }
         },
         addClassTd() {
             Array.from(document.getElementsByTagName('tr')).forEach(tr => {
@@ -88,21 +92,22 @@ export default {
             document.getElementsByClassName('header__item')[this.header.colPosition]?.classList.remove('resize');
         },
         updateHeaderWidth(newWidth) {
-            this.isResized = false;
-            // this.removeClassTd();
+            if (this.isDesktop) {
+                this.isResized = false;
 
-            this.updateHeaders(
-                [...this.headers].map(el => {
-                    if (el.id === this.header.id) {
-                        return {
-                            ...el,
-                            width: newWidth
+                this.updateHeaders(
+                    [...this.headers].map(el => {
+                        if (el.id === this.header.id) {
+                            return {
+                                ...el,
+                                width: newWidth
+                            }
+                        } else {
+                            return el;
                         }
-                    } else {
-                        return el;
-                    }
-                })
-            )
+                    })
+                )
+            }
         },
         debounce(func, wait, immediate) {
             let timeout;
@@ -131,16 +136,16 @@ export default {
 
 <style  scoped>
 .header__item {
-    padding: 10px 0 13px 11px;
+    padding: 10px 0 15px 11px;
     resize: horizontal;
-    border-right: 1px solid red;
     overflow: hidden;
     white-space: nowrap;
     text-align: start;
     border-right: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
     min-width: 100%;
     position: relative;
-    letter-spacing: 0.5px;
+    letter-spacing: 0.4px;
 }
 .header__item::-webkit-resizer {
     background-color: transparent;

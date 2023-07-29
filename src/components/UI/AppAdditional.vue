@@ -11,10 +11,11 @@ export default {
 <style scoped>
 .icon--additional {
     width: 10px;
-    height: 15px;
+    height: 18px;
     background-image: url('../../assets/icons/ellipsis.svg');
     background-size: 3px 13px;
-    background-position: -2px 5px;
+    background-position: 0px 3px;
+    margin-left: -2px;
     background-repeat: no-repeat;
     cursor: pointer;
 }
@@ -24,9 +25,9 @@ export default {
 }
 @media(max-width: 1025px) {
     .icon--additional {
-        height: 15px;
+        height: 16px;
         background-position: 0px 3px;
-        margin-bottom: 5px;
+        margin-bottom: 4px;
     }
 
 }

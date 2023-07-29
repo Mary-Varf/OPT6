@@ -31,7 +31,7 @@ export default {
 .app-input {
     border-radius: 5px;
     border: solid 1px #ccc;
-    padding: 7px 6px 7px 15px;
+    padding: 6px 6px 8px 15px;
     background-color: var(--white);
     width: 100%;
     margin: 5px 0;

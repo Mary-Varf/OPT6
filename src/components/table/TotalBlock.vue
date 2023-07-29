@@ -67,6 +67,11 @@ export default {
     align-self: flex-end;
     font-size: 14px;
 }
+.total-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+ }
 .table-total__row {
     display: flex;
     justify-content: space-between;
@@ -90,7 +95,7 @@ export default {
 @media(max-width: 1025px) {
     .table-total{
         width: 100%;
-        margin-top: 15px;
+        margin-top: 10px;
         padding: 12px 13px 12px 15px;
     }
     .table-total__row {

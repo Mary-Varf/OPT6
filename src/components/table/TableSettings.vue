@@ -19,7 +19,10 @@
                     Отображение столбцов
                 </li>
                 <ul class="checkboxes">
-                    <li class="popup__li" v-for="header in headers">
+                    <li class="popup__li"
+                        v-for="header in headers"
+                        :key="header.id"
+                    >
                         <AppCheckbox :checked="isChecked(header.id)"
                                      :id="header.id"
                                      @update-checkbox="updateColPosition"
@@ -93,6 +96,7 @@ export default {
 .popup__li {
     position: relative;
     align-items: center;
+    padding: 6px 10px;
 }
 .right-arrow, .left-arrow {
     position: absolute;

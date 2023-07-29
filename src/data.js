@@ -12,7 +12,7 @@ const headers = [
         colPosition: 1,
         type: 'additional',
         name: 'Действия',
-        width: 10,
+        width: 11,
         inputType: 'additional',
     },
     {
@@ -36,7 +36,7 @@ const headers = [
         colPosition: 4,
         type: 'quantity',
         name: 'Кол-во',
-        width: 207,
+        width: 208,
         inputType: 'number'
     },
     {
@@ -44,7 +44,7 @@ const headers = [
         colPosition: 5,
         type: 'itemName',
         name: 'Название товара',
-        width: 157,
+        width: 158,
         inputType: 'select'
     },
     {
@@ -129,7 +129,12 @@ const options = [
     { id: 3, name: 'Black щебень фр. 6-10 мм, 25кг' },
     { id: 4, name: 'Yellow щебень фр. 6-10 мм, 25кг' },
     { id: 5, name: 'White щебень фр. 6-10 мм, 25кг' },
-    { id: 6, name: 'Orange щебень фр. 6-10 мм, 25кг' }
+    { id: 6, name: 'Orange щебень фр. 6-10 мм, 25кг' },
+    { id: 7, name: 'Мраморный щебень фр. 6-10 мм, 25кг' },
+    { id: 8, name: 'Мраморный щебень фр. 6-10 мм, 25кг' },
+    { id: 9, name: 'Мраморный щебень фр. 6-10 мм, 25кг' },
+    { id: 10, name: 'Мраморный щебень фр. 6-10 мм, 25кг' },
+    { id: 11, name: 'Мраморный щебень фр. 6-10 мм, 25кг' },
 ]
 export default {
     content,

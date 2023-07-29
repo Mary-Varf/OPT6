@@ -18,4 +18,8 @@ export default {
     background-repeat: no-repeat;
     cursor: pointer;
 }
+.app-settings:hover,
+.app-settings:focus {
+    background-image: url("@/assets/icons/settingsDark.svg");
+}
 </style>

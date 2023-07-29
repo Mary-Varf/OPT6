@@ -1,6 +1,6 @@
 <template>
     <td>
-        <AppBurger v-if="cell.inputType === 'rowPosition'">{{ cell.value }}</AppBurger>
+        <AppBurger v-if="cell.inputType === 'rowPosition'" class="td-burger">{{ cell.value }}</AppBurger>
 
         <template v-if="cell.inputType === 'additional'">
             <AppAdditional @click="toggleDeletePopup(cell.value)" />
@@ -13,6 +13,7 @@
         
         <div style="position:relative;">
             <AppSelect v-if="cell.inputType === 'select'"
+                       :row-id="rowId"
                        :options="options"
                        :model-value="cell.value"
                        @change-option="updateContentVal"
@@ -36,7 +37,7 @@
 </template>
 
 <script>
-import {mapActions, mapGetters, mapState} from "vuex";
+import {mapActions, mapGetters, mapMutations, mapState} from "vuex";
 import AppPopup from '@/components/UI/AppPopup.vue'
 import AppAdditional from '@/components/UI/AppAdditional.vue'
 import AppBurger from '@/components/UI/AppBurger.vue'
@@ -59,6 +60,10 @@ export default {
             type: Object,
             required: true,
         },
+        rowId: {
+            type: Number,
+            required: true,
+        },
     },
     data () {
         return {
@@ -71,14 +76,20 @@ export default {
             headers: state=>state.headers,
             options: state=>state.options,
             content: state=>state.content,
+            isAddedNewItem: state=>state.isAddedNewItem,
         }),
         ...mapGetters({
             sortedHeaders: 'sortedHeaders',
+            lastRowId: 'lastRowId',
         }),
     },
     methods: {
         ...mapActions({
             updateContent: 'updateContent',
+            postContent: 'postContent',
+        }),
+        ...mapMutations({
+            setStateIsAddedNewItem: 'setStateIsAddedNewItem',
         }),
         toggleDeletePopup() {
             this.showDeletePopup = !this.showDeletePopup
@@ -87,7 +98,6 @@ export default {
             this.newVal = newVal;
         },
         updateCheckbox({id, checked}) {
-            console.log(checked)
             this.updateContentVal(checked);
         },
         updateContentVal(newVal) {
@@ -102,11 +112,12 @@ export default {
                 }
             })
 
-            this.updateContent(newContent)
+            this.updateContent(newContent);
+            this.handleSave();
         },
         deleteItem() {
             let newHeaders = [...this.content]
-                .filter(item=>item.id!==this.id)
+                .filter(item=>item.id !== this.rowId)
                 .map((item, index) => {
                     return {
                         ...item,
@@ -114,38 +125,28 @@ export default {
                     }
                 })
 
+            if (this.rowId === this.lastRowId) {
+                this.setStateIsAddedNewItem(false);
+            }
+
             this.updateContent(newHeaders);
             this.toggleDeletePopup();
+            this.postContent();
+        },
+        handleSave() {
+            this.postContent();
         },
     },
 }
 </script>
 
 <style scoped>
-
-.td-additional {
-    position: relative;
-}
-
 td {
-    padding: 1px 8px 1px 12px;
+    padding: 0px 8px 0px 12px;
     align-items: center;
     vertical-align: center;
     boreder: 1px solid var(--white);
     position: relative;
-}
-.position-td {
-    display: flex;
-    height: 100%;
-    align-self: center;
-    justify-self: center;
-    flex-wrap: nowrap;
-    align-items: center;
-    gap: 5px;
-    position: relative;
-    vertical-align: center;
-    padding-top: 15px;
-    cursor: pointer;
 }
 .popup__li {
     text-align: start;
@@ -153,7 +154,21 @@ td {
 td.resize {
     border-right: 1px solid #b6b3b3;
 }
-
+.td-burger {
+    margin-top: -3px;
+}
+.save--icon {
+    height: 15px;
+    width: 15px;
+    background-image: url("@/assets/icons/save.svg");
+    background-repeat: no-repeat;
+    background-size: 15px 15px;
+    cursor: pointer;
+}
+.popup {
+    bottom: -18px;
+    transform: translateX(10px);
+}
 @media(max-width: 1025px) {
     td {
         padding: 0;
