@@ -3,6 +3,6 @@ const Position = {
     Right: 'right'
 }
 
-const desktopWidth = 1024;
+const desktopWidth = 1024
 
 export { Position, desktopWidth }

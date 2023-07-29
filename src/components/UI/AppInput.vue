@@ -7,21 +7,20 @@ export default {
     name: 'AppInput',
     props: {
         value: {
-            type: [String, Number],
+            type: [String, Number]
         },
         type: {
             type: String,
-            default: 'text',
+            default: 'text'
         },
         name: {
             type: String,
-            required: true,
+            required: true
         }
-
     },
     methods: {
         updateInput(e) {
-            this.$emit('update', e.target.value);
+            this.$emit('update', e.target.value)
         }
     }
 }
@@ -42,8 +41,8 @@ export default {
     outline: none;
 }
 
-@media(max-width: 1025px) {
-    .app-input{
+@media (max-width: 1023px) {
+    .app-input {
         padding: 6px 6px 7px 14px;
         font-size: 16px;
     }

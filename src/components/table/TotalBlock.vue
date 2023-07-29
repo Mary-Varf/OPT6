@@ -24,7 +24,7 @@
 </template>
 
 <script>
-import {mapGetters} from "vuex";
+import { mapGetters } from 'vuex'
 
 export default {
     name: 'TotalBlock',
@@ -32,15 +32,15 @@ export default {
         ...mapGetters({
             weight: 'weight',
             quantity: 'quantity',
-            totalPrice:'totalPrice',
-            price: 'price',
-        }),
+            totalPrice: 'totalPrice',
+            price: 'price'
+        })
     },
     methods: {
         convertNumber(num) {
             return num?.toLocaleString('ru-RU')
         }
-    },
+    }
 }
 </script>
 
@@ -59,7 +59,7 @@ export default {
     display: flex;
     flex-direction: column;
     justify-content: flex-end;
- }
+}
 .table-total__row {
     display: flex;
     justify-content: space-between;
@@ -67,7 +67,7 @@ export default {
     margin-bottom: 13px;
 }
 
-.table-total__row *{
+.table-total__row * {
     font-size: 14px;
 }
 .table-total__row:last-child {
@@ -80,8 +80,8 @@ export default {
     font-weight: 600;
     margin-bottom: 0;
 }
-@media(max-width: 1025px) {
-    .table-total{
+@media (max-width: 1023px) {
+    .table-total {
         width: 100%;
         margin-top: 10px;
         padding: 12px 13px 12px 15px;
@@ -93,10 +93,9 @@ export default {
     .table-total:last-child {
         margin-top: 0;
     }
-    .table-total--bold *{
+    .table-total--bold * {
         font-size: 16px;
         letter-spacing: 0;
-
     }
     .table-total--bold {
         padding-top: 14px;

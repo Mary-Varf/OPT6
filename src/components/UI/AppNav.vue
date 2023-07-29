@@ -1,8 +1,8 @@
 <template>
     <div class="navbar">
-            <a href="#" class="navbar__item">Общее</a>
-            <a href="#" class="navbar__item active">Товар списания</a>
-            <a href="#" class="navbar__item">Доп. расходы</a>
+        <a href="#" class="navbar__item">Общее</a>
+        <a href="#" class="navbar__item active">Товар списания</a>
+        <a href="#" class="navbar__item">Доп. расходы</a>
     </div>
 </template>
 

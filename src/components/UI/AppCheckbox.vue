@@ -1,8 +1,5 @@
 <template>
-    <input type="checkbox"
-           :checked="checked"
-           @change="onToggle"
-    >
+    <input type="checkbox" :checked="checked" @change="onToggle" />
     <span class="checkbox__label"><slot></slot></span>
 </template>
 
@@ -12,21 +9,21 @@ export default {
     props: {
         label: {
             type: String,
-            default: '',
+            default: ''
         },
         checked: {
-            type: Boolean,
+            type: Boolean
         },
         id: {
             type: Number,
-            required: true,
+            required: true
         }
     },
     methods: {
-        onToggle (e) {
-            this.$emit('update-checkbox', {id: this.id, checked: e.target.checked});
-        },
-    },
+        onToggle(e) {
+            this.$emit('update-checkbox', { id: this.id, checked: e.target.checked })
+        }
+    }
 }
 </script>
 

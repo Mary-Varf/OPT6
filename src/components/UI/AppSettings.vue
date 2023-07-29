@@ -6,7 +6,7 @@
 
 <script>
 export default {
-    name: 'AppSettings',
+    name: 'AppSettings'
 }
 </script>
 
@@ -14,12 +14,12 @@ export default {
 .app-settings {
     width: 15px;
     height: 15px;
-    background-image: url("@/assets/icons/settings.svg");
+    background-image: url('@/assets/icons/settings.svg');
     background-repeat: no-repeat;
     cursor: pointer;
 }
 .app-settings:hover,
 .app-settings:focus {
-    background-image: url("@/assets/icons/settingsDark.svg");
+    background-image: url('@/assets/icons/settingsDark.svg');
 }
 </style>

@@ -1,15 +1,11 @@
 <template>
     <div class="add-block container">
-        <AppButton @click="handleSave"
-                   v-if="isAddedNewItem"
-        >
+        <AppButton @click="handleSave" v-if="isAddedNewItem">
             <span class="btn--save btn__icon"></span>
             Сохранить
         </AppButton>
 
-        <AppButton @click="addNewRow"
-                   v-else
-        >
+        <AppButton @click="addNewRow" v-else>
             <span class="btn--add btn__icon"></span>
             Добавить строку
         </AppButton>
@@ -18,35 +14,35 @@
 
 <script>
 import AppButton from '@/components/UI/AppButton.vue'
-import {mapActions, mapMutations, mapState} from "vuex";
+import { mapActions, mapMutations, mapState } from 'vuex'
 
 export default {
     name: 'AddBlock',
     components: { AppButton },
     computed: {
         ...mapState({
-            isAddedNewItem: state=>state.isAddedNewItem,
-        }),
+            isAddedNewItem: (state) => state.isAddedNewItem
+        })
     },
     methods: {
         ...mapMutations({
-            setStateIsAddedNewItem: 'setStateIsAddedNewItem',
+            setStateIsAddedNewItem: 'setStateIsAddedNewItem'
         }),
         ...mapActions({
-            postContent: 'postContent',
+            postContent: 'postContent'
         }),
         addNewRow() {
-            this.toggleStateIsAddedNewItem();
-            this.$emit('add-new-row');
+            this.toggleStateIsAddedNewItem()
+            this.$emit('add-new-row')
         },
         toggleStateIsAddedNewItem() {
-            this.setStateIsAddedNewItem(!this.isAddedNewItem);
+            this.setStateIsAddedNewItem(!this.isAddedNewItem)
         },
         handleSave() {
-            this.postContent();
-            this.toggleStateIsAddedNewItem();
-        },
-    },
+            this.postContent()
+            this.toggleStateIsAddedNewItem()
+        }
+    }
 }
 </script>
 
@@ -54,7 +50,8 @@ export default {
 .btn {
     cursor: pointer;
 }
-.btn--add, .btn--save {
+.btn--add,
+.btn--save {
     display: inline-block;
     width: 11px;
     height: 11px;
@@ -68,21 +65,18 @@ export default {
 }
 .btn--save {
     background-image: url('../assets/icons/save.svg');
-
 }
 .add-block {
     padding: 19px 24px;
     box-shadow: 0 5px 20px 0 rgba(0, 0, 0, 0.07);
 }
-button:disabled{
+button:disabled {
     cursor: not-allowed;
     background-color: #8f8f8f;
-
 }
-@media(max-width: 1025px) {
+@media (max-width: 1023px) {
     .add-block {
         padding: 20px 24px;
     }
 }
-
 </style>

@@ -22,7 +22,7 @@
 </template>
 
 <script>
-import AppInput from '@/components/UI/AppInput.vue';
+import AppInput from '@/components/UI/AppInput.vue'
 
 export default {
     name: 'AppSelect',
@@ -37,13 +37,13 @@ export default {
         },
         rowId: {
             type: Number,
-            required: true,
-        },
+            required: true
+        }
     },
     data() {
         return {
             query: '',
-            selectedOption: null,
+            selectedOption: null
         }
     },
     computed: {
@@ -54,13 +54,13 @@ export default {
         },
         getOptionName() {
             if (this.selectedOption == null) {
-                return '';
+                return ''
             }
             return this.options.find((item) => item.id === this.selectedOption)?.name ?? ''
         }
     },
     mounted() {
-        this.selectedOption = this.modelValue;
+        this.selectedOption = this.modelValue
 
         this.$nextTick(() => {
             document.addEventListener('click', (e) => this.handleClickOutsideSelect(e))
@@ -68,9 +68,11 @@ export default {
     },
     methods: {
         handleClickOutsideSelect(e) {
-            if (!e.target?.classList.contains(`app-select__item-${this.rowId}`)
-                && !e.target?.classList.contains(`app-select__input-${this.rowId}`)) {
-                this.$refs.list?.classList.remove('open');
+            if (
+                !e.target?.classList.contains(`app-select__item-${this.rowId}`) &&
+                !e.target?.classList.contains(`app-select__input-${this.rowId}`)
+            ) {
+                this.$refs.list?.classList.remove('open')
             }
         },
         changeQuery(e) {
@@ -80,14 +82,14 @@ export default {
             this.$refs.list.classList.toggle('open')
         },
         selectOption(id) {
-            this.toggleList();
+            this.toggleList()
 
             const option = this.options.find((option) => option.id === id)
 
-            this.selectedOption = id;
-            this.query = option.name;
+            this.selectedOption = id
+            this.query = option.name
 
-            this.$emit('change-option', id);
+            this.$emit('change-option', id)
         },
         getBoldText(name) {
             return name.toLowerCase().replace(this.query.toLowerCase(), `<b>${this.query}</b>`)
@@ -147,7 +149,7 @@ export default {
     align-self: flex-start;
     border: none;
 }
-.app-select__list .app-select__item *{
+.app-select__list .app-select__item * {
     font-size: 14px;
 }
 
@@ -161,7 +163,7 @@ export default {
     width: 100%;
 }
 
-@media(max-width: 1024px) {
+@media (max-width: 1023px) {
     .app-select__list {
         margin-top: 0;
         line-height: 0.5;
@@ -173,9 +175,9 @@ export default {
         border-radius: 5px;
         max-height: 145px;
     }
-    ..app-select__list .app-select__item {
+    .app-select__list .app-select__item {
         font-size: 14px;
-        padding: 10px 10px 11px;
+        padding: 10px 10px 12px;
     }
 }
 </style>

@@ -13,7 +13,7 @@ const headers = [
         type: 'additional',
         name: 'Действия',
         width: 11,
-        inputType: 'additional',
+        inputType: 'additional'
     },
     {
         id: 2,
@@ -61,7 +61,7 @@ const headers = [
         type: 'addedDelivery',
         name: 'Заложено на доставку',
         width: 100,
-    inputType: 'checkbox',
+        inputType: 'checkbox'
     },
     {
         id: 8,
@@ -69,7 +69,7 @@ const headers = [
         type: 'deliveryPrice',
         name: 'Цена доставки, руб',
         width: 100,
-        inputType: 'number',
+        inputType: 'number'
     },
     {
         id: 9,
@@ -77,8 +77,8 @@ const headers = [
         type: 'maxWeight',
         name: 'Max грузоподъемность, кг',
         width: 100,
-        inputType: 'number',
-    },
+        inputType: 'number'
+    }
 ]
 const content = [
     {
@@ -92,7 +92,7 @@ const content = [
         addedDelivery: true,
         deliveryPrice: 2,
         maxWeight: 100,
-        total: 1233,
+        total: 1233
     },
     {
         id: 1,
@@ -105,7 +105,7 @@ const content = [
         addedDelivery: false,
         deliveryPrice: 11,
         maxWeight: 100,
-        total: 1233,
+        total: 1233
     },
     {
         id: 2,
@@ -118,7 +118,7 @@ const content = [
         addedDelivery: true,
         deliveryPrice: 52,
         maxWeight: 100,
-        total: 1233,
+        total: 1233
     }
 ]
 
@@ -134,10 +134,10 @@ const options = [
     { id: 8, name: 'Мраморный щебень фр. 6-10 мм, 25кг' },
     { id: 9, name: 'Мраморный щебень фр. 6-10 мм, 25кг' },
     { id: 10, name: 'Мраморный щебень фр. 6-10 мм, 25кг' },
-    { id: 11, name: 'Мраморный щебень фр. 6-10 мм, 25кг' },
+    { id: 11, name: 'Мраморный щебень фр. 6-10 мм, 25кг' }
 ]
 export default {
     content,
     headers,
-    options,
+    options
 }

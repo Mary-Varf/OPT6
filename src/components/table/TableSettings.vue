@@ -1,8 +1,6 @@
 <template>
     <AppSettings @click="toggleOpenPopup">
-        <AppPopup v-if="isOpenedSettingsPopup"
-                  :position="positionRight"
-        >
+        <AppPopup v-if="isOpenedSettingsPopup" :position="positionRight">
             <ul class="popup__ul">
                 <li class="popup__li" @click="openSubPopup">
                     Отображение столбцов
@@ -10,23 +8,20 @@
                 </li>
             </ul>
         </AppPopup>
-        <AppPopup v-if="isOpenedSubPopup"
-                  :position="positionRight"
-        >
+        <AppPopup v-if="isOpenedSubPopup" :position="positionRight">
             <ul class="popup__ul sub">
                 <li class="popup__li" @click="openSubPopup">
                     <span class="left-arrow"></span>
                     Отображение столбцов
                 </li>
                 <ul class="checkboxes">
-                    <li class="popup__li"
-                        v-for="header in headers"
-                        :key="header.id"
-                    >
-                        <AppCheckbox :checked="isChecked(header.id)"
-                                     :id="header.id"
-                                     @update-checkbox="updateColPosition"
-                        >{{header.name}}</AppCheckbox>
+                    <li class="popup__li" v-for="header in headers" :key="header.id">
+                        <AppCheckbox
+                            :checked="isChecked(header.id)"
+                            :id="header.id"
+                            @update-checkbox="updateColPosition"
+                            >{{ header.name }}</AppCheckbox
+                        >
                     </li>
                 </ul>
             </ul>
@@ -35,11 +30,11 @@
 </template>
 
 <script>
-import {mapState} from 'vuex';
-import {Position} from "@/enums";
-import AppCheckbox from "@/components/UI/AppCheckbox.vue";
-import AppSettings from "@/components/UI/AppSettings.vue";
-import AppPopup from "@/components/UI/AppPopup.vue";
+import { mapState } from 'vuex'
+import { Position } from '@/enums'
+import AppCheckbox from '@/components/UI/AppCheckbox.vue'
+import AppSettings from '@/components/UI/AppSettings.vue'
+import AppPopup from '@/components/UI/AppPopup.vue'
 
 export default {
     name: 'TableSettings',
@@ -49,41 +44,41 @@ export default {
             newHeaders: [],
             positionRight: Position.Right,
             isOpenedSettingsPopup: false,
-            isOpenedSubPopup: false,
+            isOpenedSubPopup: false
         }
     },
     computed: {
         ...mapState({
-            headers: state=>state.headers,
-        }),
+            headers: (state) => state.headers
+        })
     },
     methods: {
         toggleOpenPopup() {
-            this.isOpenedSettingsPopup = !this.isOpenedSettingsPopup;
+            this.isOpenedSettingsPopup = !this.isOpenedSettingsPopup
         },
         openSubPopup() {
-            this.isOpenedSubPopup = !this.isOpenedSubPopup;
+            this.isOpenedSubPopup = !this.isOpenedSubPopup
         },
         isChecked(id) {
-            return !!this.headers.find(header=> header.id === id && header.colPosition >= 0);
+            return !!this.headers.find((header) => header.id === id && header.colPosition >= 0)
         },
-        updateColPosition({id, checked}) {
-            let maxColPos = 0;
-            this.headers.forEach(header=>{
-                maxColPos = header.colPosition > maxColPos ? header.colPosition : maxColPos;
+        updateColPosition({ id, checked }) {
+            let maxColPos = 0
+            this.headers.forEach((header) => {
+                maxColPos = header.colPosition > maxColPos ? header.colPosition : maxColPos
             })
-            const updatedHeaders = this.headers.map(header=> {
+            const updatedHeaders = this.headers.map((header) => {
                 if (header.id === id) {
                     return {
                         ...header,
-                        colPosition: checked ? ++maxColPos : -1,
+                        colPosition: checked ? ++maxColPos : -1
                     }
                 } else {
-                    return header;
+                    return header
                 }
             })
-            this.$store.commit('setHeaders', updatedHeaders);
-        },
+            this.$store.commit('setHeaders', updatedHeaders)
+        }
     }
 }
 </script>
@@ -98,12 +93,13 @@ export default {
     align-items: center;
     padding: 6px 10px;
 }
-.right-arrow, .left-arrow {
+.right-arrow,
+.left-arrow {
     position: absolute;
     width: 4px;
     height: 10px;
     transform: translateY(-50%);
-    background-image: url("@/assets/icons/rightArrow.svg");
+    background-image: url('@/assets/icons/rightArrow.svg');
 }
 .right-arrow {
     right: 10px;

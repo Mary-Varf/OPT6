@@ -1,7 +1,5 @@
 <template>
-    <div class="popup"
-        :class="className"
-    >
+    <div class="popup" :class="className">
         <slot></slot>
     </div>
 </template>
@@ -14,18 +12,18 @@ export default {
         position: {
             type: String,
             default: Position.Left
-        },
+        }
     },
     computed: {
         className() {
-            let className = 'popup--left';
+            let className = 'popup--left'
 
             if (this.position == Position.Right) {
-                className = 'popup--right';
+                className = 'popup--right'
             }
-            return className;
-        },
-    },
+            return className
+        }
+    }
 }
 </script>
 

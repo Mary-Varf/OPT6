@@ -1,26 +1,29 @@
 <template>
-    <tr v-show="showTopPlaceholder"><td :colspan="row.length"><div class="empty"></div></td></tr>
-<!--    <tr v-show="id===1"><td :colspan="row.length"><div class="empty"></div></td></tr>-->
-    <tr class="row"
+    <tr v-show="showTopPlaceholder">
+        <td :colspan="row.length"><div class="empty"></div></td>
+    </tr>
+
+    <tr
+        class="row"
         :draggable="true"
         @dragstart="onDragStart($event, rowPosition)"
         @dragenter="onDragEnter"
         @dragend="onDragEnd(rowPosition)"
         @dragover.prevent
     >
-        <template v-for="cell in row"
-                  :key="cell.name"
-        >
-            <TableCell :row-id="id"
-                       :cell="cell" />
+        <template v-for="cell in row" :key="cell.name">
+            <TableCell :row-id="id" :cell="cell" />
         </template>
     </tr>
-    <tr v-show="showBottomPlaceholder"><td :colspan="row.length"><div class="empty"></div></td></tr>
+
+    <tr v-show="showBottomPlaceholder">
+        <td :colspan="row.length"><div class="empty"></div></td>
+    </tr>
 </template>
 
 <script>
-import { mapGetters, mapState } from "vuex";
-import TableCell from "@/components/table/TableCell.vue";
+import { mapGetters, mapState } from 'vuex'
+import TableCell from '@/components/table/TableCell.vue'
 
 export default {
     name: 'TableRow',
@@ -32,46 +35,46 @@ export default {
         },
         id: {
             type: Number,
-            required: true,
+            required: true
         },
         showBottomPlaceholder: {
-            type: Boolean,
+            type: Boolean
         },
         showTopPlaceholder: {
-            type: Boolean,
-        },
+            type: Boolean
+        }
     },
     data() {
         return {
-            startCol: 0,
+            startCol: 0
         }
     },
     computed: {
         ...mapState({
-            headers: state=>state.headers,
-            content: state=>state.content,
+            headers: (state) => state.headers,
+            content: (state) => state.content
         }),
         ...mapGetters({
-            sortedHeaders: 'sortedHeaders',
+            sortedHeaders: 'sortedHeaders'
         }),
         rowPosition() {
-            return this.row.find(el=>el.name=='rowPosition').value;
-        },
+            return this.row.find((el) => el.name == 'rowPosition').value
+        }
     },
     methods: {
         onDragEnter() {
-            this.$emit('on-drag-enter', this.rowPosition);
+            this.$emit('on-drag-enter', this.rowPosition)
         },
         onDragStart(e, position) {
             e.dataTransfer.dropEffect = 'move'
             e.dataTransfer.effectAllowed = 'move'
 
-            this.startCol = position;
-            this.$emit('on-drag-row', this.startCol);
+            this.startCol = position
+            this.$emit('on-drag-row', this.startCol)
         },
         onDragEnd(newPosition) {
-            this.$emit('on-drop-row', newPosition);
-        },
+            this.$emit('on-drop-row', newPosition)
+        }
     }
 }
 </script>
@@ -83,6 +86,5 @@ export default {
     background-color: #fbfcfd;
     margin-bottom: -1px;
     background-image: url("data:image/svg+xml;utf8,<svg width='100%' height='100%' xmlns='http://www.w3.org/2000/svg'><rect width='100%' height='100%' style='fill: none; stroke: lightsteelblue; stroke-width: 4; stroke-dasharray: 7 7'/></svg>");
-
 }
 </style>

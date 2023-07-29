@@ -1,17 +1,11 @@
 <template>
-    <div class="container app-table"
-         v-if="isDesktop">
+    <div class="container app-table" v-if="isDesktop">
         <div>
-            <TableSettings/>
+            <TableSettings />
         </div>
 
-        <div class="table-container"
-             ref="tableContainer"
-        >
-            <table class="table"
-                    :width="tableWidth"
-                   @wheel="handleWheel"
-            >
+        <div class="table-container" ref="tableContainer">
+            <table class="table" :width="tableWidth" @wheel="handleWheel">
                 <TableHeader
                     v-for="header in sortedHeaders"
                     :key="header.type"
@@ -22,43 +16,43 @@
                     @dragover.prevent
                 />
 
-                <template v-for="row in sortRows"
-                          :key="row.id"
-                >
-                    <TableRow @on-drop-row="onDropRow"
-                              @on-drag-row="onDragRow"
-                              @on-drag-enter="onDragEnter"
-                              :id="row.id"
-                              :showBottomPlaceholder="!isDragHeader && row.rowPosition == this.enterPosition && showBottomPlaceholder"
-                              :showTopPlaceholder="!isDragHeader && row.rowPosition == this.enterPosition && showTopPlaceholder"
-                              :row="sortedRow(row)" />
+                <template v-for="row in sortRows" :key="row.id">
+                    <TableRow
+                        @on-drop-row="onDropRow"
+                        @on-drag-row="onDragRow"
+                        @on-drag-enter="onDragEnter"
+                        :id="row.id"
+                        :showBottomPlaceholder="
+                            !isDragHeader &&
+                            row.rowPosition == this.enterPosition &&
+                            showBottomPlaceholder
+                        "
+                        :showTopPlaceholder="
+                            !isDragHeader &&
+                            row.rowPosition == this.enterPosition &&
+                            showTopPlaceholder
+                        "
+                        :row="sortedRow(row)"
+                    />
                 </template>
             </table>
 
             <TotalBlock />
         </div>
-
     </div>
 
     <template v-else>
-
         <transition-group name="list">
-            <div class="card container"
-                 v-for="card in sortRows"
-                 :key="card.id"
-                 :id="card.id"
-            >
-                <template v-for="header in sortedHeaders"
-                          :key="header.id">
-                    <TableHeader v-show="header.id != 0"
-                                 :header="header" />
+            <div class="card container" v-for="card in sortRows" :key="card.id" :id="card.id">
+                <template v-for="header in sortedHeaders" :key="header.id">
+                    <TableHeader v-show="header.id != 0" :header="header" />
 
-                        <TableCell :cell="getCell(header, card)"
-                                   :row-id="card.id"
-                                   v-show="header.id != 0"
-                        >
-
-                        </TableCell>
+                    <TableCell
+                        :cell="getCell(header, card)"
+                        :row-id="card.id"
+                        v-show="header.id != 0"
+                    >
+                    </TableCell>
                 </template>
             </div>
         </transition-group>
@@ -67,21 +61,28 @@
 </template>
 
 <script>
-import TableHeader from "@/components/table/TableHeader.vue";
+import TableHeader from '@/components/table/TableHeader.vue'
 import AppAdditional from '@/components/UI/AppAdditional.vue'
 import AppPopup from '@/components/UI/AppPopup.vue'
 import TableRow from '@/components/table/TableRow.vue'
 import TotalBlock from '@/components/table/TotalBlock.vue'
-import TableSettings from "@/components/table/TableSettings.vue";
-import {mapActions, mapGetters, mapMutations, mapState} from "vuex";
-import { desktopWidth } from '@/enums';
-import TableCell from "@/components/table/TableCell.vue";
+import TableSettings from '@/components/table/TableSettings.vue'
+import { mapActions, mapGetters, mapMutations, mapState } from 'vuex'
+import { desktopWidth } from '@/enums'
+import TableCell from '@/components/table/TableCell.vue'
 
 export default {
     name: 'AppTable',
-    components: {TableCell, TableHeader, TableSettings, TotalBlock, TableRow, AppPopup, AppAdditional },
-    props: {
+    components: {
+        TableCell,
+        TableHeader,
+        TableSettings,
+        TotalBlock,
+        TableRow,
+        AppPopup,
+        AppAdditional
     },
+    props: {},
     data() {
         return {
             startColPosition: 0,
@@ -90,124 +91,132 @@ export default {
             showBottomPlaceholder: false,
             enterPosition: 0,
             scroll: 0,
-            isDragHeader: false,
+            isDragHeader: false
         }
     },
     computed: {
         ...mapState({
-            headers: state=>state.headers,
-            content: state=>state.content,
-            isDesktop: state=>state.isDesktop,
+            headers: (state) => state.headers,
+            content: (state) => state.content,
+            isDesktop: (state) => state.isDesktop
         }),
         ...mapGetters({
             sortedHeaders: 'sortedHeaders',
             sortRows: 'sortRows',
-            tableWidth: 'tableWidth',
-        }),
+            tableWidth: 'tableWidth'
+        })
     },
     mounted() {
-        this.setStateIsDesktop(window.screen.width > desktopWidth);
+        this.setStateIsDesktop(window.screen.width > desktopWidth)
     },
     methods: {
         ...mapActions({
             filterByColPosition: 'filterByColPosition',
             updateHeaders: 'updateHeaders',
-            updateContent: 'updateContent',
+            updateContent: 'updateContent'
         }),
         ...mapMutations({
-            setStateIsDesktop: 'setStateIsDesktop',
+            setStateIsDesktop: 'setStateIsDesktop'
         }),
         sortedRow(row) {
-            let newRow = [];
-            let keys = Object.keys(row);
+            let newRow = []
+            let keys = Object.keys(row)
 
-            this.sortedHeaders.forEach(header=> {
+            this.sortedHeaders.forEach((header) => {
                 newRow.push({
-                    name: keys.find(key=>key==header.type),
+                    name: keys.find((key) => key == header.type),
                     value: row[header.type],
                     inputType: header.inputType
                 })
             })
 
-            return newRow;
+            return newRow
         },
         handleWheel(e) {
             if (e.target.tagName !== 'LI') {
-                const tableContainer = this.$refs.tableContainer;
-                this.scroll = this.scroll + e.deltaY >= 0 && this.scroll + e.deltaY <= this.tableWidth ? this.scroll + e.deltaY : this.scroll;
+                const tableContainer = this.$refs.tableContainer
+                this.scroll =
+                    this.scroll + e.deltaY >= 0 && this.scroll + e.deltaY <= this.tableWidth
+                        ? this.scroll + e.deltaY
+                        : this.scroll
 
-                e.preventDefault();
+                e.preventDefault()
 
-                tableContainer.scrollLeft = this.scroll;
+                tableContainer.scrollLeft = this.scroll
             }
         },
         handleDropCol(event, newPosition) {
             if (this.isDesktop) {
-                this.isDragHeader = false;
-                let updatedHeaders = [...this.headers].map(header => {
-                    let newHeader = {};
+                this.isDragHeader = false
+                let updatedHeaders = [...this.headers].map((header) => {
+                    let newHeader = {}
                     if (header.colPosition === this.startColPosition) {
                         newHeader = {
                             ...header,
-                            colPosition: newPosition,
+                            colPosition: newPosition
                         }
                     } else if (newPosition <= header.colPosition) {
                         newHeader = {
                             ...header,
-                            colPosition: ++header.colPosition,
+                            colPosition: ++header.colPosition
                         }
                     } else {
-                        return header;
+                        return header
                     }
-                    return newHeader;
+                    return newHeader
                 })
-                this.updateHeaders(updatedHeaders);
+                this.updateHeaders(updatedHeaders)
             }
         },
         changeStartCol(startColPosition) {
-            this.isDragHeader = true;
-            this.startColPosition = startColPosition;
+            this.isDragHeader = true
+            this.startColPosition = startColPosition
         },
         onDropRow() {
             if (this.isDesktop) {
-                this.showTopPlaceholder = false;
-                this.showBottomPlaceholder = false;
+                this.showTopPlaceholder = false
+                this.showBottomPlaceholder = false
 
-                let newContent = [...this.content].map(row => {
-                    let updatedRow = {};
+                let newContent = [...this.content].map((row) => {
+                    let updatedRow = {}
 
-                    if (row.rowPosition == this.enterPosition || row.rowPosition == this.startRowPosition) {
+                    if (
+                        row.rowPosition == this.enterPosition ||
+                        row.rowPosition == this.startRowPosition
+                    ) {
                         updatedRow = {
                             ...row,
-                            rowPosition: row.rowPosition == this.startRowPosition ? this.enterPosition : this.startRowPosition,
+                            rowPosition:
+                                row.rowPosition == this.startRowPosition
+                                    ? this.enterPosition
+                                    : this.startRowPosition
                         }
                     } else {
-                        updatedRow = row;
+                        updatedRow = row
                     }
-                    return updatedRow;
-                });
-                this.updateContent(newContent);
+                    return updatedRow
+                })
+                this.updateContent(newContent)
             }
         },
         onDragRow(colPosition) {
-            this.startRowPosition = colPosition;
+            this.startRowPosition = colPosition
         },
         onDragEnter(colPosition) {
             if (this.isDesktop) {
-                this.enterPosition = colPosition;
+                this.enterPosition = colPosition
 
                 if (colPosition < this.startRowPosition && !this.isDragHeader) {
-                    this.showTopPlaceholder = true;
-                }
-                else if(colPosition > this.startRowPosition && !this.isDragHeader) {
-                    this.showBottomPlaceholder = true;
+                    this.showTopPlaceholder = true
+                } else if (colPosition > this.startRowPosition && !this.isDragHeader) {
+                    this.showBottomPlaceholder = true
                 }
             }
         },
         getCell(header, card) {
-            return this.sortedRow(card).find(el=> el.name === header.type);
-        },
-    },
+            return this.sortedRow(card).find((el) => el.name === header.type)
+        }
+    }
 }
 </script>
 
@@ -216,7 +225,8 @@ export default {
     display: inline-block;
     margin-right: 10px;
 }
-.list-enter-active, .list-leave-active {
+.list-enter-active,
+.list-leave-active {
     transition: all 0.3s;
 }
 .list-enter, .list-leave-to /* .list-leave-active below version 2.1.8 */ {
@@ -276,7 +286,7 @@ export default {
     margin-bottom: 4px;
     padding: 12px 15px 9px;
 }
-@media(max-width: 1025px) {
+@media (max-width: 1023px) {
     .table-container.marginBottom {
         padding-bottom: 0;
     }

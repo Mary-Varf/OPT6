@@ -1,15 +1,15 @@
 <template>
     <div class="app">
         <h1 class="title">Проведение ТО&nbsp;и мелкий ремонт</h1>
+
         <AppNav />
-        <AddBlock @add-new-row="addNewRow"/>
+
+        <AddBlock @add-new-row="addNewRow" />
 
         <div v-if="dataIsLoaded" class="loading">
             <div class="lds-dual-ring"></div>
         </div>
-        <AppTable ref="table"
-                  v-else
-        />
+        <AppTable ref="table" v-else />
     </div>
 </template>
 
@@ -17,42 +17,43 @@
 import AppTable from '@/components/table/AppTable.vue'
 import AppNav from '@/components/UI/AppNav.vue'
 import AddBlock from '@/components/AddBlock.vue'
-import {mapActions, mapState} from "vuex";
+import { mapActions, mapState } from 'vuex'
 
 export default {
     components: { AddBlock, AppNav, AppTable },
     computed: {
         ...mapState({
-            content: state=>state.content,
-            isAddedNewItem: state=>state.isAddedNewItem,
-            dataIsLoaded: state=> state.dataIsLoaded,
-        }),
+            content: (state) => state.content,
+            isAddedNewItem: (state) => state.isAddedNewItem,
+            dataIsLoaded: (state) => state.dataIsLoaded
+        })
     },
     mounted() {
-        this.getContent();
-        this.getHeaders();
-        this.getOptions();
+        this.getContent()
+        this.getHeaders()
+        this.getOptions()
     },
     methods: {
         ...mapActions({
             addEmptyRow: 'addEmptyRow',
             getContent: 'getContent',
             getHeaders: 'getHeaders',
-            getOptions: 'getOptions',
+            getOptions: 'getOptions'
         }),
         addNewRow() {
-            let maxId = this.content.reduce((acc, curr) => (acc.b > curr.id.b ? acc : curr.id));
+            let maxId = this.content.reduce((acc, curr) => (acc.b > curr.id.b ? acc : curr.id))
 
-            this.addEmptyRow(++maxId);
+            this.addEmptyRow(++maxId)
+
             this.$nextTick(() => {
-                this.moveToNewRow(maxId);
+                this.moveToNewRow(maxId)
             })
         },
-        moveToNewRow (id) {
-            const newItem = document.getElementById(id);
+        moveToNewRow(id) {
+            const newItem = document.getElementById(id)
 
-            newItem?.scrollIntoView({block: "start", behavior: "smooth"});
-        },
+            newItem?.scrollIntoView({ block: 'start', behavior: 'smooth' })
+        }
     }
 }
 </script>
@@ -81,7 +82,7 @@ export default {
     height: 80px;
 }
 .lds-dual-ring:after {
-    content: " ";
+    content: ' ';
     display: block;
     width: 64px;
     height: 64px;
@@ -100,7 +101,7 @@ export default {
     }
 }
 
-@media(max-width: 1025px) {
+@media (max-width: 1023px) {
     .app {
         margin-left: 0;
         padding: 16px 10px;

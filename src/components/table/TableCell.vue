@@ -1,6 +1,8 @@
 <template>
     <td>
-        <AppBurger v-if="cell.inputType === 'rowPosition'" class="td-burger">{{ cell.value }}</AppBurger>
+        <AppBurger v-if="cell.inputType === 'rowPosition'" class="td-burger">{{
+            cell.value
+        }}</AppBurger>
 
         <template v-if="cell.inputType === 'additional'">
             <AppAdditional @click="toggleDeletePopup(cell.value)" />
@@ -10,40 +12,43 @@
                 </ul>
             </AppPopup>
         </template>
-        
-        <div style="position:relative;">
-            <AppSelect v-if="cell.inputType === 'select'"
-                       :row-id="rowId"
-                       :options="options"
-                       :model-value="cell.value"
-                       @change-option="updateContentVal"
+
+        <div style="position: relative">
+            <AppSelect
+                v-if="cell.inputType === 'select'"
+                :row-id="rowId"
+                :options="options"
+                :model-value="cell.value"
+                @change-option="updateContentVal"
             />
         </div>
 
-        <AppInput v-if="cell.inputType === 'text' || cell.inputType === 'number'"
-                  :type="cell.inputType"
-                  :value="cell.value"
-                  :name="cell.name"
-                  @update="setNewVal"
-                  @blur="updateContentVal(newVal)"
+        <AppInput
+            v-if="cell.inputType === 'text' || cell.inputType === 'number'"
+            :type="cell.inputType"
+            :value="cell.value"
+            :name="cell.name"
+            @update="setNewVal"
+            @blur="updateContentVal(newVal)"
         />
 
-        <AppCheckbox v-if="cell.inputType === 'checkbox'"
-                     :checked="cell.value"
-                     :name="cell.name"
-                     @update-checkbox="updateCheckbox"
+        <AppCheckbox
+            v-if="cell.inputType === 'checkbox'"
+            :checked="cell.value"
+            :name="cell.name"
+            @update-checkbox="updateCheckbox"
         />
     </td>
 </template>
 
 <script>
-import {mapActions, mapGetters, mapMutations, mapState} from "vuex";
+import { mapActions, mapGetters, mapMutations, mapState } from 'vuex'
 import AppPopup from '@/components/UI/AppPopup.vue'
 import AppAdditional from '@/components/UI/AppAdditional.vue'
 import AppBurger from '@/components/UI/AppBurger.vue'
 import AppInput from '@/components/UI/AppInput.vue'
 import AppSelect from '@/components/UI/AppSelect.vue'
-import AppCheckbox from "@/components/UI/AppCheckbox.vue";
+import AppCheckbox from '@/components/UI/AppCheckbox.vue'
 
 export default {
     name: 'TableCell',
@@ -53,94 +58,94 @@ export default {
         AppInput,
         AppBurger,
         AppPopup,
-        AppAdditional,
+        AppAdditional
     },
     props: {
         cell: {
             type: Object,
-            required: true,
+            required: true
         },
         rowId: {
             type: Number,
-            required: true,
-        },
+            required: true
+        }
     },
-    data () {
+    data() {
         return {
             showDeletePopup: false,
-            newVal: null,
+            newVal: null
         }
     },
     computed: {
         ...mapState({
-            headers: state=>state.headers,
-            options: state=>state.options,
-            content: state=>state.content,
-            isAddedNewItem: state=>state.isAddedNewItem,
+            headers: (state) => state.headers,
+            options: (state) => state.options,
+            content: (state) => state.content,
+            isAddedNewItem: (state) => state.isAddedNewItem
         }),
         ...mapGetters({
             sortedHeaders: 'sortedHeaders',
-            lastRowId: 'lastRowId',
-        }),
+            lastRowId: 'lastRowId'
+        })
     },
     methods: {
         ...mapActions({
             updateContent: 'updateContent',
-            postContent: 'postContent',
+            postContent: 'postContent'
         }),
         ...mapMutations({
-            setStateIsAddedNewItem: 'setStateIsAddedNewItem',
+            setStateIsAddedNewItem: 'setStateIsAddedNewItem'
         }),
         toggleDeletePopup() {
             this.showDeletePopup = !this.showDeletePopup
         },
         setNewVal(newVal) {
-            this.newVal = newVal;
+            this.newVal = newVal
         },
-        updateCheckbox({id, checked}) {
-            this.updateContentVal(checked);
+        updateCheckbox({ checked }) {
+            this.updateContentVal(checked)
         },
         updateContentVal(newVal) {
-            let oldVal = [...this.content].find(el => el.id===this.rowId)[this.cell.name];
+            let oldVal = [...this.content].find((el) => el.id === this.rowId)[this.cell.name]
 
             if (oldVal !== newVal) {
-                let newContent = [...this.content].map(el => {
+                let newContent = [...this.content].map((el) => {
                     if (el.id === this.rowId) {
                         return {
                             ...el,
-                            [this.cell.name]: newVal,
+                            [this.cell.name]: newVal
                         }
                     } else {
-                        return el;
+                        return el
                     }
                 })
 
-                this.updateContent(newContent);
-                this.handleSave();
+                this.updateContent(newContent)
+                this.handleSave()
             }
         },
         deleteItem() {
             let newHeaders = [...this.content]
-                .filter(item=>item.id !== this.rowId)
+                .filter((item) => item.id !== this.rowId)
                 .map((item, index) => {
                     return {
                         ...item,
-                        rowPosition: ++index,
+                        rowPosition: ++index
                     }
                 })
 
             if (this.rowId === this.lastRowId) {
-                this.setStateIsAddedNewItem(false);
+                this.setStateIsAddedNewItem(false)
             }
 
-            this.updateContent(newHeaders);
-            this.toggleDeletePopup();
-            this.postContent();
+            this.updateContent(newHeaders)
+            this.toggleDeletePopup()
+            this.postContent()
         },
         handleSave() {
-            this.postContent();
-        },
-    },
+            this.postContent()
+        }
+    }
 }
 </script>
 
@@ -164,7 +169,7 @@ td.resize {
 .save--icon {
     height: 15px;
     width: 15px;
-    background-image: url("@/assets/icons/save.svg");
+    background-image: url('@/assets/icons/save.svg');
     background-repeat: no-repeat;
     background-size: 15px 15px;
     cursor: pointer;
@@ -173,7 +178,7 @@ td.resize {
     bottom: -18px;
     transform: translateX(10px);
 }
-@media(max-width: 1025px) {
+@media (max-width: 1023px) {
     td {
         padding: 0;
         margin: 0 0 10px;
