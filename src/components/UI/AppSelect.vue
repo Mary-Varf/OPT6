@@ -43,7 +43,7 @@ export default {
     data() {
         return {
             query: '',
-            selectedOption: 0
+            selectedOption: null,
         }
     },
     computed: {
@@ -53,10 +53,15 @@ export default {
             })
         },
         getOptionName() {
-            return this.options.find((item) => item.id === this.modelValue)?.name ?? ''
+            if (this.selectedOption == null) {
+                return '';
+            }
+            return this.options.find((item) => item.id === this.selectedOption)?.name ?? ''
         }
     },
     mounted() {
+        this.selectedOption = this.modelValue;
+
         this.$nextTick(() => {
             document.addEventListener('click', (e) => this.handleClickOutsideSelect(e))
         })
@@ -79,8 +84,8 @@ export default {
 
             const option = this.options.find((option) => option.id === id)
 
-            this.selectedOption = id
-            this.query = option.name
+            this.selectedOption = id;
+            this.query = option.name;
 
             this.$emit('change-option', id);
         },

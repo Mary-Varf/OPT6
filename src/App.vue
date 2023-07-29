@@ -28,7 +28,7 @@ export default {
             dataIsLoaded: state=> state.dataIsLoaded,
         }),
     },
-    created() {
+    mounted() {
         this.getContent();
         this.getHeaders();
         this.getOptions();

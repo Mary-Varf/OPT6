@@ -30,6 +30,23 @@ export default createStore({
         lastRowId(state){
             return state.content.reduce((acc, el) => (acc > el.id ? acc : el.id), 0)
         },
+        weight(state) {
+            return state.content?.reduce((acc, el) => { return acc + parseInt(el.maxWeight)}, 0);
+        },
+        quantity (state) {
+            return state.content?.reduce((acc, el) => { console.log(el);return acc + parseInt(el.quantity)}, 0);
+        },
+        deliveryPrice (state) {
+            return state.content?.reduce((acc, el) => { return acc + (parseInt(el.addedDelivery) ? parseInt(el.deliveryPrice) * parseInt(el.quantity) : 0)}, 0);
+        },
+        totalPrice (state) {
+            return state.content?.reduce((acc, el) => { return acc + (parseInt(el.quantity) * parseInt(el.price))}, 0) +
+                state.content?.reduce((acc, el) => { return acc + (parseInt(el.addedDelivery) ? parseInt(el.deliveryPrice) * parseInt(el.quantity) : 0)}, 0);
+        },
+        price (state) {
+            return state.content?.reduce((acc, el) => {
+                return acc + (parseInt(el.quantity) * parseInt(el.price))}, 0);
+        },
     },
     mutations: {
         setHeaders(state, headers) {
@@ -49,8 +66,8 @@ export default createStore({
         },
     },
     actions: {
-        postContent({state}) {
-            $.ajax({
+        async postContent({state}) {
+            await $.ajax({
                 url: 'ajax/json.php',
                 method: 'get',
                 dataType: 'json',
@@ -61,8 +78,8 @@ export default createStore({
                 }
             });
         },
-        getContent({state, commit}) {
-            $.getJSON( "ajax/content.json", ( data ) => {
+        async getContent({state, commit}) {
+            await $.getJSON( "ajax/content.json", ( data ) => {
                 let content = [];
                 $.each( data, function( key, val ) {
                     content.push(val);
@@ -72,8 +89,8 @@ export default createStore({
 
             commit('setStateDataIsLoaded', false);
         },
-        getOptions({state, commit}) {
-            $.getJSON( "ajax/options.json", ( data ) => {
+        async getOptions({state, commit}) {
+            await $.getJSON( "ajax/options.json", ( data ) => {
                 let options = [];
                 $.each( data, function( key, val ) {
                     options.push(val);
@@ -83,8 +100,8 @@ export default createStore({
 
             commit('setStateDataIsLoaded', false);
         },
-        getHeaders({state, commit}) {
-            $.getJSON( "ajax/headers.json", ( data ) => {
+        async getHeaders({state, commit}) {
+            await $.getJSON( "ajax/headers.json", ( data ) => {
                 let headers = [];
                 $.each( data, function( key, val ) {
                     headers.push(val);

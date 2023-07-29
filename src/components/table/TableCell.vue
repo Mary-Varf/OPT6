@@ -101,19 +101,23 @@ export default {
             this.updateContentVal(checked);
         },
         updateContentVal(newVal) {
-            let newContent = [...this.content].map(el => {
-                if (el.id === this.id) {
-                    return {
-                        ...el,
-                        [this.cell.name]: newVal,
-                    }
-                } else {
-                    return el;
-                }
-            })
+            let oldVal = [...this.content].find(el => el.id===this.rowId)[this.cell.name];
 
-            this.updateContent(newContent);
-            this.handleSave();
+            if (oldVal !== newVal) {
+                let newContent = [...this.content].map(el => {
+                    if (el.id === this.rowId) {
+                        return {
+                            ...el,
+                            [this.cell.name]: newVal,
+                        }
+                    } else {
+                        return el;
+                    }
+                })
+
+                this.updateContent(newContent);
+                this.handleSave();
+            }
         },
         deleteItem() {
             let newHeaders = [...this.content]

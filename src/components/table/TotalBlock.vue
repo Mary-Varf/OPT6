@@ -24,35 +24,23 @@
 </template>
 
 <script>
-import {mapState} from "vuex";
+import {mapGetters} from "vuex";
 
 export default {
     name: 'TotalBlock',
     computed: {
-        ...mapState({
-            content: state=>state.content,
+        ...mapGetters({
+            weight: 'weight',
+            quantity: 'quantity',
+            totalPrice:'totalPrice',
+            price: 'price',
         }),
-        weight() {
-            return this.content?.reduce((acc, el) => { return acc + el.maxWeight}, 0);
-        },
-        quantity () {
-            return this.content?.reduce((acc, el) => { return acc + el.quantity}, 0);
-        },
-        deliveryPrice () {
-            return this.content?.reduce((acc, el) => { return acc + (el.addedDelivery ? el.deliveryPrice * el.quantity : 0)}, 0);
-        },
-        totalPrice () {
-            return this.price + this.deliveryPrice;
-        },
-        price () {
-            return this.content?.reduce((acc, el) => { return acc + (el.quantity * el.price)}, 0);
-        },
     },
     methods: {
         convertNumber(num) {
-            return num.toLocaleString('ru-RU')
+            return num?.toLocaleString('ru-RU')
         }
-    }
+    },
 }
 </script>
 
