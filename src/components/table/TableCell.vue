@@ -19,6 +19,7 @@
                 :input-class="error ? 'input__error' : ''"
                 :row-id="rowId"
                 :options="options"
+                :input-name="cell.inputType"
                 :model-value="cell.value"
                 @change-option="updateContentVal"
             />

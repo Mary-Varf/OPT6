@@ -2,11 +2,11 @@
     <AppInput
         class="app-select__input"
         :class="`app-select__input-${rowId} ${inputClass}`"
-        name="name"
+        :name="inputName"
         autocomplete="off"
         :type="'text'"
         :value="getOptionName"
-        @click="toggleList"
+        @click="openList"
         @input="onChange"
     ></AppInput>
     <ul class="app-select__list" ref="list">
@@ -42,6 +42,10 @@ export default {
         inputClass: {
             type: String,
             default: ''
+        },
+        inputName: {
+            type: String,
+            required: true
         }
     },
     data() {
@@ -57,9 +61,6 @@ export default {
             })
         },
         getOptionName() {
-            if (this.selectedOption == null) {
-                return ''
-            }
             return this.options.find((item) => item.id === this.selectedOption)?.name ?? ''
         }
     },
@@ -92,10 +93,17 @@ export default {
         toggleList() {
             this.$refs.list.classList.toggle('open')
         },
+        openList() {
+            this.$refs.list.classList.add('open')
+        },
         selectOption(id) {
             this.toggleList()
 
             const option = this.options.find((option) => option.id === id)
+
+            if (this.selectedOption == id) {
+                this.$forceUpdate()
+            }
 
             this.selectedOption = id
             this.query = option.name
@@ -103,7 +111,9 @@ export default {
             this.$emit('change-option', id)
         },
         getBoldText(name) {
-            return name.toLowerCase().replace(this.query.toLowerCase(), `<b>${this.query}</b>`)
+            return name
+                .toLowerCase()
+                .replace(this.query.toLowerCase(), `<b>${this.query.toLowerCase()}</b>`)
         }
     }
 }
