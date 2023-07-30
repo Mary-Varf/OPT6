@@ -1,7 +1,7 @@
-<h1 align='center'>Skillbox Vue </h1>
+<h1 align='center'>ОПТ6 тестовое задание</h1>
 <h2 align="center"><a  href='https://daily-podcast.ru'>Demo</a></h2>
 <p align='center'>
-  <img src='https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExbm14ZDBmNDh3MDBsMDRzMHh3aHNsenRpMXI4YzZ5Z2E0M3hzaW9jYyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/x3TGLdQbcMOZSlKQFz/giphy.gif' width='60%'>
+  <img src='https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExd3NkemFlYnRjMGF6emcwdGRwbTVtMDFpdWQzdWM1a2xqODYwc2VydSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/UeTU3GO7vUORlF30si/giphy.gif' width='60%'>
 </p>
 
 <p align='center'>
