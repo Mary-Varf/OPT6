@@ -81,7 +81,7 @@ export default {
             headers: (state) => state.headers,
             options: (state) => state.options,
             content: (state) => state.content,
-            isAddedNewItem: (state) => state.isAddedNewItem
+            isAddedNewItem: (state) => state.isAddedNewItem,
         }),
         ...mapGetters({
             sortedHeaders: 'sortedHeaders',
@@ -91,7 +91,8 @@ export default {
     methods: {
         ...mapActions({
             updateContent: 'updateContent',
-            postContent: 'postContent'
+            postContent: 'postContent',
+
         }),
         ...mapMutations({
             setStateIsAddedNewItem: 'setStateIsAddedNewItem'
@@ -108,7 +109,7 @@ export default {
         updateContentVal(newVal) {
             let oldVal = [...this.content].find((el) => el.id === this.rowId)[this.cell.name]
 
-            if (oldVal !== newVal) {
+            if (oldVal !== newVal && newVal != null && newVal != undefined) {
                 let newContent = [...this.content].map((el) => {
                     if (el.id === this.rowId) {
                         return {
@@ -121,7 +122,7 @@ export default {
                 })
 
                 this.updateContent(newContent)
-                this.handleSave()
+                this.postContent()
             }
         },
         deleteItem() {
@@ -142,9 +143,6 @@ export default {
             this.toggleDeletePopup()
             this.postContent()
         },
-        handleSave() {
-            this.postContent()
-        }
     }
 }
 </script>
@@ -156,6 +154,7 @@ td {
     vertical-align: center;
     boreder: 1px solid var(--white);
     position: relative;
+    font-size: 16px;
 }
 .popup__li {
     text-align: start;
@@ -185,7 +184,7 @@ td.resize {
     }
     .popup {
         bottom: -3px;
-        transform: translate(10px, 100%);
+        transform: translate(0px, 100%);
     }
     .popup__li {
         padding: 4px 10px 8px;

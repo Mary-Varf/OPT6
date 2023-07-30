@@ -98,7 +98,7 @@ export default {
         letter-spacing: 0;
     }
     .table-total--bold {
-        padding-top: 14px;
+        padding-top: 16px;
     }
 }
 </style>

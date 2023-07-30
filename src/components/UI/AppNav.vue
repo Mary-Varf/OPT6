@@ -21,6 +21,7 @@ export default {
 .navbar__item {
     color: var(--ashblue);
     font-weight: 600;
+    font-size: 16px;
 }
 .navbar__item.active {
     color: var(--black);

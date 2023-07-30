@@ -152,6 +152,7 @@ export default {
     min-width: 100%;
     position: relative;
     letter-spacing: 0.4px;
+    font-size: 16px;
 }
 .header__item::-webkit-resizer {
     background-color: transparent;

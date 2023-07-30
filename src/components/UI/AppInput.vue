@@ -1,5 +1,5 @@
 <template>
-    <input class="app-input" :value="value" :type="type" @input="updateInput" />
+    <input class="app-input" :value="value" :type="type" @input="updateInput"/>
 </template>
 
 <script>
@@ -34,6 +34,7 @@ export default {
     background-color: var(--white);
     width: 100%;
     margin: 5px 0;
+    font-size: 16px;
 }
 .app-input:hover,
 .app-input:focus {

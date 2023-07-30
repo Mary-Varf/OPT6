@@ -9,7 +9,8 @@ export default createStore({
         options: Data.options,
         isDesktop: true,
         isAddedNewItem: false,
-        dataIsLoaded: false
+        dataIsLoaded: false,
+        invalidRowID: -1
     }),
     getters: {
         sortedHeaders(state) {
@@ -86,20 +87,33 @@ export default createStore({
         },
         setStateDataIsLoaded(state, dataIsLoaded) {
             state.dataIsLoaded = dataIsLoaded
+        },
+        setInvalidRowID(state, invalidRowID) {
+            state.invalidRowID = invalidRowID
         }
     },
     actions: {
-        async postContent({ state }) {
-            await $.ajax({
-                url: 'ajax/json.php',
-                method: 'get',
-                dataType: 'json',
-                data: state.content,
-                success: function (data) {
-                    alert(data.text) /* выведет "Текст" */
-                    alert(data.error) /* выведет "Ошибка" */
-                }
-            })
+        async postContent({ state, commit }) {
+            const invalidRow = getErrorID(state.content);
+
+            if (invalidRow == -1) {
+                commit('setInvalidRowID', -1)
+                commit('setStateIsAddedNewItem', false);
+
+                await $.ajax({
+                    url: 'ajax/json.php',
+                    method: 'get',
+                    dataType: 'json',
+                    data: state.content,
+                    success: function (data) {
+                        alert(data.text) /* выведет "Текст" */
+                        alert(data.error) /* выведет "Ошибка" */
+                    }
+                })
+            } else {
+                commit('setInvalidRowID', invalidRow);
+                commit('setStateIsAddedNewItem', true);
+            }
         },
         async getContent({ state, commit }) {
             await $.getJSON('ajax/content.json', (data) => {
@@ -163,3 +177,15 @@ export default createStore({
         }
     }
 })
+
+const getErrorID = (content) => {
+    let rowIdWithError = -1;
+
+    content.map(el=>{
+        Object.values(el).map(val => {
+            rowIdWithError = (val == null || val == undefined) ? el.id : rowIdWithError;
+        })
+    })
+
+    return rowIdWithError;
+}

@@ -165,7 +165,7 @@ export default {
 
 @media (max-width: 1023px) {
     .app-select__list {
-        margin-top: 0;
+        margin-top: -1px;
         line-height: 0.5;
         padding: 0;
         text-align: start;
@@ -178,6 +178,9 @@ export default {
     .app-select__list .app-select__item {
         font-size: 14px;
         padding: 10px 10px 12px;
+    }
+    .bold {
+        font-style: 14px;
     }
 }
 </style>

@@ -43,7 +43,11 @@
 
     <template v-else>
         <transition-group name="list">
-            <div class="card container" v-for="card in sortRows" :key="card.id" :id="card.id">
+            <div class="card container"
+                 :class="{'card__error': invalidRowID == card.id}"
+                 v-for="card in sortRows"
+                 :key="card.id"
+                 :id="card.id">
                 <template v-for="header in sortedHeaders" :key="header.id">
                     <TableHeader v-show="header.id != 0" :header="header" />
 
@@ -79,8 +83,6 @@ export default {
         TableSettings,
         TotalBlock,
         TableRow,
-        AppPopup,
-        AppAdditional
     },
     props: {},
     data() {
@@ -98,7 +100,8 @@ export default {
         ...mapState({
             headers: (state) => state.headers,
             content: (state) => state.content,
-            isDesktop: (state) => state.isDesktop
+            isDesktop: (state) => state.isDesktop,
+            invalidRowID: (state)=> state.invalidRowID
         }),
         ...mapGetters({
             sortedHeaders: 'sortedHeaders',
@@ -113,7 +116,7 @@ export default {
         ...mapActions({
             filterByColPosition: 'filterByColPosition',
             updateHeaders: 'updateHeaders',
-            updateContent: 'updateContent'
+            updateContent: 'updateContent',
         }),
         ...mapMutations({
             setStateIsDesktop: 'setStateIsDesktop'
@@ -284,7 +287,10 @@ export default {
     display: flex;
     flex-direction: column;
     margin-bottom: 4px;
-    padding: 12px 15px 9px;
+    padding: 13px 15px 8px;
+}
+.card__error {
+    background-color: #fadee2;
 }
 @media (max-width: 1023px) {
     .table-container.marginBottom {
