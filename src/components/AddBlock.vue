@@ -1,11 +1,6 @@
 <template>
     <div class="add-block container">
-        <AppButton @click="postContent" v-if="isAddedNewItem">
-            <span class="btn--save btn__icon"></span>
-            Сохранить
-        </AppButton>
-
-        <AppButton @click="addNewRow" v-else>
+        <AppButton @click="addNewRow" :disabled="this.invalidRowID >= 0">
             <span class="btn--add btn__icon"></span>
             Добавить строку
         </AppButton>
@@ -21,7 +16,8 @@ export default {
     components: { AppButton },
     computed: {
         ...mapState({
-            isAddedNewItem: (state) => state.isAddedNewItem
+            isAddedNewItem: (state) => state.isAddedNewItem,
+            invalidRowID: (state) => state.invalidRowID
         })
     },
     methods: {
@@ -32,11 +28,12 @@ export default {
             postContent: 'postContent'
         }),
         addNewRow() {
-            this.toggleStateIsAddedNewItem()
-            this.$emit('add-new-row')
-        },
-        toggleStateIsAddedNewItem() {
+            if (this.isAddedNewItem) {
+                return
+            }
+
             this.setStateIsAddedNewItem(!this.isAddedNewItem)
+            this.$emit('add-new-row')
         }
     }
 }
@@ -66,7 +63,7 @@ export default {
     padding: 19px 24px;
     box-shadow: 0 5px 20px 0 rgba(0, 0, 0, 0.07);
 }
-button:disabled {
+.btn:disabled {
     cursor: not-allowed;
     background-color: #8f8f8f;
 }

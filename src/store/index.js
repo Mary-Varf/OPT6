@@ -34,20 +34,20 @@ export default createStore({
         },
         weight(state) {
             return state.content?.reduce((acc, el) => {
-                return acc + parseInt(el.maxWeight)
+                return acc + convertToNumber(el.maxWeight)
             }, 0)
         },
         quantity(state) {
             return state.content?.reduce((acc, el) => {
-                return acc + parseInt(el.quantity)
+                return acc + convertToNumber(el.quantity)
             }, 0)
         },
         deliveryPrice(state) {
             return state.content?.reduce((acc, el) => {
                 return (
                     acc +
-                    (parseInt(el.addedDelivery)
-                        ? parseInt(el.deliveryPrice) * parseInt(el.quantity)
+                    (convertToNumber(el.addedDelivery)
+                        ? convertToNumber(el.deliveryPrice) * convertToNumber(el.quantity)
                         : 0)
                 )
             }, 0)
@@ -55,13 +55,13 @@ export default createStore({
         totalPrice(state) {
             return (
                 state.content?.reduce((acc, el) => {
-                    return acc + parseInt(el.quantity) * parseInt(el.price)
+                    return acc + convertToNumber(el.quantity) * convertToNumber(el.price)
                 }, 0) +
                 state.content?.reduce((acc, el) => {
                     return (
                         acc +
-                        (parseInt(el.addedDelivery)
-                            ? parseInt(el.deliveryPrice) * parseInt(el.quantity)
+                        (convertToNumber(el.addedDelivery)
+                            ? convertToNumber(el.deliveryPrice) * convertToNumber(el.quantity)
                             : 0)
                     )
                 }, 0)
@@ -69,7 +69,7 @@ export default createStore({
         },
         price(state) {
             return state.content?.reduce((acc, el) => {
-                return acc + parseInt(el.quantity) * parseInt(el.price)
+                return acc + convertToNumber(el.quantity) * convertToNumber(el.price)
             }, 0)
         }
     },
@@ -195,9 +195,14 @@ const getErrorID = (content) => {
 
     content.map((el) => {
         Object.values(el).map((val) => {
-            rowIdWithError = val == null || val == undefined ? el.id : rowIdWithError
+            rowIdWithError =
+                val == null || val == undefined || (val == '' && val != 0) ? el.id : rowIdWithError
         })
     })
 
     return rowIdWithError
+}
+
+const convertToNumber = (str) => {
+    return ++str ?? 0
 }

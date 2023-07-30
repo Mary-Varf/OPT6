@@ -1,5 +1,5 @@
 <template>
-    <td :class="{ input__error: this.rowId === this.invalidRowID && this.isInvalidCell }">
+    <td>
         <AppBurger v-if="cell.inputType === 'rowPosition'" class="td-burger">{{
             cell.value
         }}</AppBurger>
@@ -16,6 +16,7 @@
         <div style="position: relative">
             <AppSelect
                 v-if="cell.inputType === 'select'"
+                :input-class="error ? 'input__error' : ''"
                 :row-id="rowId"
                 :options="options"
                 :model-value="cell.value"
@@ -25,11 +26,11 @@
 
         <AppInput
             v-if="cell.inputType === 'text' || cell.inputType === 'number'"
+            :class="{ input__error: error }"
             :type="cell.inputType"
             :value="cell.value"
             :name="cell.name"
-            @update="setNewVal"
-            @blur="updateContentVal(newVal)"
+            @update="updateContentVal"
         />
 
         <AppCheckbox
@@ -73,7 +74,8 @@ export default {
     data() {
         return {
             showDeletePopup: false,
-            newVal: null
+            newVal: null,
+            error: false
         }
     },
     computed: {
@@ -87,10 +89,7 @@ export default {
         ...mapGetters({
             sortedHeaders: 'sortedHeaders',
             lastRowId: 'lastRowId'
-        }),
-        isInvalidCell() {
-            return this.cell.value == null || this.cell.value == undefined
-        }
+        })
     },
     methods: {
         ...mapActions({
@@ -109,9 +108,17 @@ export default {
         updateCheckbox({ checked }) {
             this.updateContentVal(checked)
         },
+        setError(newState) {
+            this.error = newState
+        },
         updateContentVal(newVal) {
+            this.setError(false)
             if (this.lastRowId !== this.rowId) {
                 this.setStateIsAddedNewItem(false)
+            }
+
+            if (newVal == undefined || newVal == null || newVal == '') {
+                this.setError(true)
             }
 
             let newContent = [...this.content].map((el) => {
@@ -163,17 +170,6 @@ td.resize {
 }
 .td-burger {
     margin-top: -3px;
-}
-.input__error {
-    background-color: #fadce0;
-}
-.save--icon {
-    height: 15px;
-    width: 15px;
-    background-image: url('@/assets/icons/save.svg');
-    background-repeat: no-repeat;
-    background-size: 15px 15px;
-    cursor: pointer;
 }
 .popup {
     bottom: -18px;

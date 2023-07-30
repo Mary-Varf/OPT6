@@ -1,7 +1,7 @@
 <template>
     <AppInput
         class="app-select__input"
-        :class="`app-select__input-${rowId}`"
+        :class="`app-select__input-${rowId} ${inputClass}`"
         name="name"
         autocomplete="off"
         :type="'text'"
@@ -38,6 +38,10 @@ export default {
         rowId: {
             type: Number,
             required: true
+        },
+        inputClass: {
+            type: String,
+            default: ''
         }
     },
     data() {

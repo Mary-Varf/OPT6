@@ -57,7 +57,7 @@ export default {
     cursor: pointer;
 }
 .popup__li:hover {
-    color: #ae0a0a;
+    color: var(--wine);
 }
 
 .popup__ul::-webkit-scrollbar {

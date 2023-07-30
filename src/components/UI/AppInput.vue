@@ -41,7 +41,9 @@ export default {
     border: 1px solid var(--ashblue);
     outline: none;
 }
-
+.input__error {
+    border: 1px solid var(--wine);
+}
 @media (max-width: 1023px) {
     .app-input {
         padding: 6px 6px 7px 14px;

@@ -12,7 +12,7 @@ export default {
 .icon--additional {
     width: 10px;
     height: 18px;
-    background-image: url('../../assets/icons/ellipsis.svg');
+    background-image: url('@/assets/icons/ellipsis.svg');
     background-size: 3px 13px;
     background-position: 0px 3px;
     margin-left: -2px;
@@ -21,7 +21,7 @@ export default {
 }
 .icon--additional:hover,
 .icon--additional:focus {
-    background-image: url('../../assets/icons/ellipsisDark.svg');
+    background-image: url('@/assets/icons/ellipsisDark.svg');
 }
 @media (max-width: 1023px) {
     .icon--additional {

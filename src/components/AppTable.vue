@@ -45,12 +45,12 @@
         <transition-group name="list">
             <div class="card container" v-for="card in sortRows" :key="card.id" :id="card.id">
                 <template v-for="header in sortedHeaders" :key="header.id">
-                    <TableHeader v-show="header.id != 0" :header="header" />
+                    <TableHeaderCell v-if="header.id != 0" :header="header" />
 
                     <TableCell
                         :cell="getCell(header, card)"
                         :row-id="card.id"
-                        v-show="header.id != 0"
+                        v-if="header.id != 0"
                     >
                     </TableCell>
                 </template>
@@ -68,6 +68,7 @@ import TableSettings from '@/components/table/TableSettings.vue'
 import { mapActions, mapGetters, mapMutations, mapState } from 'vuex'
 import { desktopWidth } from '@/enums'
 import TableCell from '@/components/table/TableCell.vue'
+import $ from 'jquery'
 
 export default {
     name: 'AppTable',
@@ -281,9 +282,6 @@ export default {
     flex-direction: column;
     margin-bottom: 4px;
     padding: 13px 15px 8px;
-}
-.input__error {
-    background-color: #fadee2;
 }
 @media (max-width: 1023px) {
     .table-container.marginBottom {
