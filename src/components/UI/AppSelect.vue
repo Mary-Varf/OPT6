@@ -7,7 +7,7 @@
         :type="'text'"
         :value="getOptionName"
         @click="toggleList"
-        @input="changeQuery"
+        @input="onChange"
     ></AppInput>
     <ul class="app-select__list" ref="list">
         <li
@@ -73,6 +73,13 @@ export default {
                 !e.target?.classList.contains(`app-select__input-${this.rowId}`)
             ) {
                 this.$refs.list?.classList.remove('open')
+            }
+        },
+        onChange(e) {
+            this.changeQuery(e)
+
+            if (!this.query.length) {
+                this.$emit('change-option', undefined)
             }
         },
         changeQuery(e) {

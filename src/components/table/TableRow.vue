@@ -5,7 +5,6 @@
 
     <tr
         class="row"
-        :class="{'row__error': this.id === this.invalidRowID}"
         :draggable="true"
         @dragstart="onDragStart($event, rowPosition)"
         @dragenter="onDragEnter"
@@ -53,8 +52,7 @@ export default {
     computed: {
         ...mapState({
             headers: (state) => state.headers,
-            content: (state) => state.content,
-            invalidRowID: (state)=> state.invalidRowID
+            content: (state) => state.content
         }),
         ...mapGetters({
             sortedHeaders: 'sortedHeaders'
@@ -89,7 +87,7 @@ export default {
     margin-bottom: -1px;
     background-image: url("data:image/svg+xml;utf8,<svg width='100%' height='100%' xmlns='http://www.w3.org/2000/svg'><rect width='100%' height='100%' style='fill: none; stroke: lightsteelblue; stroke-width: 4; stroke-dasharray: 7 7'/></svg>");
 }
-.row__error {
+.row__error td {
     background-color: #fadee2;
 }
 </style>

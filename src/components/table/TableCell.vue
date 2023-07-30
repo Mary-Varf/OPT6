@@ -1,5 +1,5 @@
 <template>
-    <td>
+    <td :class="{ input__error: this.rowId === this.invalidRowID && this.isInvalidCell }">
         <AppBurger v-if="cell.inputType === 'rowPosition'" class="td-burger">{{
             cell.value
         }}</AppBurger>
@@ -82,17 +82,20 @@ export default {
             options: (state) => state.options,
             content: (state) => state.content,
             isAddedNewItem: (state) => state.isAddedNewItem,
+            invalidRowID: (state) => state.invalidRowID
         }),
         ...mapGetters({
             sortedHeaders: 'sortedHeaders',
             lastRowId: 'lastRowId'
-        })
+        }),
+        isInvalidCell() {
+            return this.cell.value == null || this.cell.value == undefined
+        }
     },
     methods: {
         ...mapActions({
             updateContent: 'updateContent',
-            postContent: 'postContent',
-
+            postContent: 'postContent'
         }),
         ...mapMutations({
             setStateIsAddedNewItem: 'setStateIsAddedNewItem'
@@ -107,23 +110,23 @@ export default {
             this.updateContentVal(checked)
         },
         updateContentVal(newVal) {
-            let oldVal = [...this.content].find((el) => el.id === this.rowId)[this.cell.name]
-
-            if (oldVal !== newVal && newVal != null && newVal != undefined) {
-                let newContent = [...this.content].map((el) => {
-                    if (el.id === this.rowId) {
-                        return {
-                            ...el,
-                            [this.cell.name]: newVal
-                        }
-                    } else {
-                        return el
-                    }
-                })
-
-                this.updateContent(newContent)
-                this.postContent()
+            if (this.lastRowId !== this.rowId) {
+                this.setStateIsAddedNewItem(false)
             }
+
+            let newContent = [...this.content].map((el) => {
+                if (el.id === this.rowId) {
+                    return {
+                        ...el,
+                        [this.cell.name]: newVal
+                    }
+                } else {
+                    return el
+                }
+            })
+
+            this.updateContent(newContent)
+            this.postContent()
         },
         deleteItem() {
             let newHeaders = [...this.content]
@@ -135,14 +138,10 @@ export default {
                     }
                 })
 
-            if (this.rowId === this.lastRowId) {
-                this.setStateIsAddedNewItem(false)
-            }
-
             this.updateContent(newHeaders)
             this.toggleDeletePopup()
             this.postContent()
-        },
+        }
     }
 }
 </script>
@@ -164,6 +163,9 @@ td.resize {
 }
 .td-burger {
     margin-top: -3px;
+}
+.input__error {
+    background-color: #fadce0;
 }
 .save--icon {
     height: 15px;

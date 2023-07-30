@@ -4,8 +4,8 @@
         :width="startWidth + 10"
         :draggable="true"
         :ref="`th${header.id}`"
-        @mousedown="handleMouseDown"
         @mouseleave="removeClassTd"
+        @mousedown="addClassTd"
         @dragstart="dragStart($event, header.colPosition)"
     >
         {{ header.name }}
@@ -16,7 +16,7 @@
 import { mapActions, mapGetters, mapState } from 'vuex'
 
 export default {
-    name: 'TableHeader',
+    name: 'TableHeaderCell',
     props: {
         header: {
             type: Object,
@@ -71,14 +71,6 @@ export default {
                 this.$emit('change-start', startPosition)
 
                 this.removeClassTd()
-            }
-        },
-        handleMouseDown(e) {
-            if (this.isDesktop) {
-                this.startWidth = e.target.offsetWidth
-                this.isResized = true
-
-                this.addClassTd()
             }
         },
         addClassTd() {

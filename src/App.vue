@@ -10,22 +10,28 @@
             <div class="lds-dual-ring"></div>
         </div>
         <AppTable ref="table" v-else />
+
+        <AppNotification id="notification" v-show="isShownSaveNotification"
+            >Сохранено</AppNotification
+        >
     </div>
 </template>
 
 <script>
-import AppTable from '@/components/table/AppTable.vue'
+import AppTable from '@/components/AppTable.vue'
 import AppNav from '@/components/UI/AppNav.vue'
 import AddBlock from '@/components/AddBlock.vue'
 import { mapActions, mapState } from 'vuex'
+import AppNotification from '@/components/UI/AppNotification.vue'
 
 export default {
-    components: { AddBlock, AppNav, AppTable },
+    components: { AppNotification, AddBlock, AppNav, AppTable },
     computed: {
         ...mapState({
             content: (state) => state.content,
             isAddedNewItem: (state) => state.isAddedNewItem,
-            dataIsLoaded: (state) => state.dataIsLoaded
+            dataIsLoaded: (state) => state.dataIsLoaded,
+            isShownSaveNotification: (state) => state.isShownSaveNotification
         })
     },
     mounted() {

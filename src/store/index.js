@@ -10,7 +10,8 @@ export default createStore({
         isDesktop: true,
         isAddedNewItem: false,
         dataIsLoaded: false,
-        invalidRowID: -1
+        invalidRowID: -1,
+        isShownSaveNotification: false
     }),
     getters: {
         sortedHeaders(state) {
@@ -90,29 +91,40 @@ export default createStore({
         },
         setInvalidRowID(state, invalidRowID) {
             state.invalidRowID = invalidRowID
+        },
+        setStateIsShownSaveNotification(state, isShownSaveNotification) {
+            state.isShownSaveNotification = isShownSaveNotification
         }
     },
     actions: {
         async postContent({ state, commit }) {
-            const invalidRow = getErrorID(state.content);
+            const invalidRow = getErrorID(state.content)
+            const showNotification = () => {
+                commit('setStateIsShownSaveNotification', true)
+                setTimeout(() => {
+                    commit('setStateIsShownSaveNotification', false)
+                }, 2000)
+            }
 
             if (invalidRow == -1) {
                 commit('setInvalidRowID', -1)
-                commit('setStateIsAddedNewItem', false);
+                commit('setStateIsAddedNewItem', false)
 
+                showNotification()
                 await $.ajax({
                     url: 'ajax/json.php',
                     method: 'get',
                     dataType: 'json',
                     data: state.content,
                     success: function (data) {
+                        showNotification()
                         alert(data.text) /* выведет "Текст" */
                         alert(data.error) /* выведет "Ошибка" */
                     }
                 })
             } else {
-                commit('setInvalidRowID', invalidRow);
-                commit('setStateIsAddedNewItem', true);
+                commit('setInvalidRowID', invalidRow)
+                commit('setStateIsAddedNewItem', true)
             }
         },
         async getContent({ state, commit }) {
@@ -179,13 +191,13 @@ export default createStore({
 })
 
 const getErrorID = (content) => {
-    let rowIdWithError = -1;
+    let rowIdWithError = -1
 
-    content.map(el=>{
-        Object.values(el).map(val => {
-            rowIdWithError = (val == null || val == undefined) ? el.id : rowIdWithError;
+    content.map((el) => {
+        Object.values(el).map((val) => {
+            rowIdWithError = val == null || val == undefined ? el.id : rowIdWithError
         })
     })
 
-    return rowIdWithError;
+    return rowIdWithError
 }

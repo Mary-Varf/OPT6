@@ -1,7 +1,6 @@
 <template>
     <div class="add-block container">
-        <AppButton @click="postContent"
-                   v-if="isAddedNewItem">
+        <AppButton @click="postContent" v-if="isAddedNewItem">
             <span class="btn--save btn__icon"></span>
             Сохранить
         </AppButton>
@@ -22,8 +21,7 @@ export default {
     components: { AppButton },
     computed: {
         ...mapState({
-            isAddedNewItem: (state) => state.isAddedNewItem,
-            areFieldsValid: (state) => state.areFieldsValid
+            isAddedNewItem: (state) => state.isAddedNewItem
         })
     },
     methods: {
@@ -39,7 +37,7 @@ export default {
         },
         toggleStateIsAddedNewItem() {
             this.setStateIsAddedNewItem(!this.isAddedNewItem)
-        },
+        }
     }
 }
 </script>

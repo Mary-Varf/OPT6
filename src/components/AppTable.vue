@@ -6,7 +6,7 @@
 
         <div class="table-container" ref="tableContainer">
             <table class="table" :width="tableWidth" @wheel="handleWheel">
-                <TableHeader
+                <TableHeaderCell
                     v-for="header in sortedHeaders"
                     :key="header.type"
                     :header="header"
@@ -43,11 +43,7 @@
 
     <template v-else>
         <transition-group name="list">
-            <div class="card container"
-                 :class="{'card__error': invalidRowID == card.id}"
-                 v-for="card in sortRows"
-                 :key="card.id"
-                 :id="card.id">
+            <div class="card container" v-for="card in sortRows" :key="card.id" :id="card.id">
                 <template v-for="header in sortedHeaders" :key="header.id">
                     <TableHeader v-show="header.id != 0" :header="header" />
 
@@ -65,9 +61,7 @@
 </template>
 
 <script>
-import TableHeader from '@/components/table/TableHeader.vue'
-import AppAdditional from '@/components/UI/AppAdditional.vue'
-import AppPopup from '@/components/UI/AppPopup.vue'
+import TableHeaderCell from '@/components/table/TableHeaderCell.vue'
 import TableRow from '@/components/table/TableRow.vue'
 import TotalBlock from '@/components/table/TotalBlock.vue'
 import TableSettings from '@/components/table/TableSettings.vue'
@@ -79,10 +73,10 @@ export default {
     name: 'AppTable',
     components: {
         TableCell,
-        TableHeader,
+        TableHeaderCell,
         TableSettings,
         TotalBlock,
-        TableRow,
+        TableRow
     },
     props: {},
     data() {
@@ -100,8 +94,7 @@ export default {
         ...mapState({
             headers: (state) => state.headers,
             content: (state) => state.content,
-            isDesktop: (state) => state.isDesktop,
-            invalidRowID: (state)=> state.invalidRowID
+            isDesktop: (state) => state.isDesktop
         }),
         ...mapGetters({
             sortedHeaders: 'sortedHeaders',
@@ -116,7 +109,7 @@ export default {
         ...mapActions({
             filterByColPosition: 'filterByColPosition',
             updateHeaders: 'updateHeaders',
-            updateContent: 'updateContent',
+            updateContent: 'updateContent'
         }),
         ...mapMutations({
             setStateIsDesktop: 'setStateIsDesktop'
@@ -289,7 +282,7 @@ export default {
     margin-bottom: 4px;
     padding: 13px 15px 8px;
 }
-.card__error {
+.input__error {
     background-color: #fadee2;
 }
 @media (max-width: 1023px) {
