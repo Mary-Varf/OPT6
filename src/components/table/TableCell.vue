@@ -95,6 +95,7 @@ export default {
     methods: {
         ...mapActions({
             updateContent: 'updateContent',
+            deleteItem: 'deleteItem',
             postContent: 'postContent'
         }),
         ...mapMutations({
@@ -134,7 +135,7 @@ export default {
             })
 
             this.updateContent(newContent)
-            this.postContent()
+            this.postContent([...this.content].find((el) => el.id === this.rowId))
         },
         deleteItem() {
             let newHeaders = [...this.content]
@@ -148,7 +149,7 @@ export default {
 
             this.updateContent(newHeaders)
             this.toggleDeletePopup()
-            this.postContent()
+            this.deleteRow(this.rowId)
         }
     }
 }

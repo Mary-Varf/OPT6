@@ -25,7 +25,7 @@ export default {
             setStateIsAddedNewItem: 'setStateIsAddedNewItem'
         }),
         ...mapActions({
-            postContent: 'postContent'
+            postContent: 't'
         }),
         addNewRow() {
             if (this.isAddedNewItem) {

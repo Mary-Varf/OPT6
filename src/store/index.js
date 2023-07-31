@@ -1,12 +1,11 @@
 import { createStore } from 'vuex'
-import Data from '@/data'
 import $ from 'jquery'
 
 export default createStore({
     state: () => ({
-        headers: Data.headers,
-        content: Data.content,
-        options: Data.options,
+        headers: [],
+        content: [],
+        options: [],
         isDesktop: true,
         isAddedNewItem: false,
         dataIsLoaded: false,
@@ -97,7 +96,20 @@ export default createStore({
         }
     },
     actions: {
-        async postContent({ state, commit }) {
+        deleteItem({ state, commit }, id) {
+            commit('setStateIsAddedNewItem', false)
+            const showNotification = () => {
+                commit('setStateIsShownSaveNotification', true)
+                setTimeout(() => {
+                    commit('setStateIsShownSaveNotification', false)
+                }, 2000)
+            }
+
+            fetch('https://daily-podcast.ru/items/' + id, { method: 'DELETE' }).then(() =>
+                showNotification()
+            )
+        },
+        async postContent({ state, commit }, newItem) {
             const invalidRow = getErrorID(state.content)
             const showNotification = () => {
                 commit('setStateIsShownSaveNotification', true)
@@ -111,52 +123,67 @@ export default createStore({
                 commit('setStateIsAddedNewItem', false)
 
                 showNotification()
-                await $.ajax({
-                    url: 'ajax/json.php',
-                    method: 'get',
-                    dataType: 'json',
-                    data: state.content,
-                    success: function (data) {
-                        showNotification()
-                        alert(data.text) /* выведет "Текст" */
-                        alert(data.error) /* выведет "Ошибка" */
-                    }
+
+                fetch('https://daily-podcast.ru/endpoints/postRow.php', {
+                    method: 'POST',
+                    body: JSON.stringify(newItem)
+                    /*на бэке проверять если элемент с этим id существует, то переписываем его, если нет, создаем новую строку*/
                 })
+                    .then((response) => {
+                        console.log(response)
+                        showNotification()
+                    })
+                    .catch((e) => console.log(e))
             } else {
                 commit('setInvalidRowID', invalidRow)
                 commit('setStateIsAddedNewItem', true)
             }
         },
         async getContent({ state, commit }) {
-            await $.getJSON('ajax/content.json', (data) => {
-                let content = []
-                $.each(data, function (key, val) {
-                    content.push(val)
-                })
-                state.content = content
+            commit('setStateDataIsLoaded', true)
+
+            await fetch('https://daily-podcast.ru/endpoints/content.php', {
+                method: 'GET',
+                headers: {
+                    Accept: 'application/json'
+                }
             })
+                .then((response) => response.json())
+                .then((response) => {
+                    state.content = response
+                })
 
             commit('setStateDataIsLoaded', false)
         },
         async getOptions({ state, commit }) {
-            await $.getJSON('ajax/options.json', (data) => {
-                let options = []
-                $.each(data, function (key, val) {
-                    options.push(val)
-                })
-                state.options = options
+            commit('setStateDataIsLoaded', true)
+
+            await fetch('https://daily-podcast.ru/endpoints/options.php', {
+                method: 'GET',
+                headers: {
+                    Accept: 'application/json'
+                }
             })
+                .then((response) => response.json())
+                .then((response) => {
+                    state.options = response
+                })
 
             commit('setStateDataIsLoaded', false)
         },
         async getHeaders({ state, commit }) {
-            await $.getJSON('ajax/headers.json', (data) => {
-                let headers = []
-                $.each(data, function (key, val) {
-                    headers.push(val)
-                })
-                state.headers = headers
+            commit('setStateDataIsLoaded', true)
+
+            await fetch('https://daily-podcast.ru/endpoints/headers.php', {
+                method: 'GET',
+                headers: {
+                    Accept: 'application/json'
+                }
             })
+                .then((response) => response.json())
+                .then((response) => {
+                    state.headers = response
+                })
 
             commit('setStateDataIsLoaded', false)
         },

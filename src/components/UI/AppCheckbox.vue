@@ -1,6 +1,6 @@
 <template>
-    <input type="checkbox" :checked="checked" @change="onToggle" />
-    <span class="checkbox__label"><slot></slot></span>
+    <input type="checkbox" :checked="checked" @change="onToggle" ref="checkbox" />
+    <label class="checkbox__label"><slot></slot></label>
 </template>
 
 <script>
@@ -20,8 +20,8 @@ export default {
         }
     },
     methods: {
-        onToggle(e) {
-            this.$emit('update-checkbox', { id: this.id, checked: e.target.checked })
+        onToggle() {
+            this.$emit('update-checkbox', { id: this.id, checked: this.$refs.checkbox.checked })
         }
     }
 }
