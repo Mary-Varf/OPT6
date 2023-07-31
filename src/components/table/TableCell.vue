@@ -95,7 +95,7 @@ export default {
     methods: {
         ...mapActions({
             updateContent: 'updateContent',
-            deleteItem: 'deleteItem',
+            postDeleteItem: 'deleteItem',
             postContent: 'postContent'
         }),
         ...mapMutations({
@@ -149,7 +149,7 @@ export default {
 
             this.updateContent(newHeaders)
             this.toggleDeletePopup()
-            this.deleteRow(this.rowId)
+            this.postDeleteItem(this.rowId)
         }
     }
 }

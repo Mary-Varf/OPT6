@@ -152,6 +152,7 @@ export default createStore({
                 .then((response) => {
                     state.content = response
                 })
+                .catch((e) => console.log(e))
 
             commit('setStateDataIsLoaded', false)
         },
@@ -168,6 +169,7 @@ export default createStore({
                 .then((response) => {
                     state.options = response
                 })
+                .catch((e) => console.log(e))
 
             commit('setStateDataIsLoaded', false)
         },
@@ -184,6 +186,7 @@ export default createStore({
                 .then((response) => {
                     state.headers = response
                 })
+                .catch((e) => console.log(e))
 
             commit('setStateDataIsLoaded', false)
         },

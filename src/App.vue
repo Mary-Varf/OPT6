@@ -47,7 +47,7 @@ export default {
             getOptions: 'getOptions'
         }),
         addNewRow() {
-            let maxId = this.content.reduce((acc, curr) => (acc.b > curr.id.b ? acc : curr.id))
+            let maxId = this.content.length ? this.content.reduce((acc, curr) => (acc.b > curr.id.b ? acc : curr.id)) : 0
 
             this.addEmptyRow(++maxId)
 
